@@ -23,7 +23,7 @@ public class RulesController {
 	@GetMapping("")
 	public String home(Model model) {
 		List<Rule> rules = ruleService.getRulesUser();
-		List<Rule> common = ruleService.getRules();
+		List<Rule> common = ruleService.getRulesNotUser();
 
 		model.addAttribute("userRules", rules);
 		model.addAttribute("publicRules", common);
@@ -119,9 +119,12 @@ public class RulesController {
 	public String addRule(@PathVariable Long id) {
 		Rule rule = ruleService.findById(id);
 
-		rule.setOwner(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
+		Rule newRule = new Rule();
+		RuleService.copyFields(newRule, rule);
 
-		ruleService.saveRule(rule);
+		newRule.setOwner(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
+
+		ruleService.saveRule(newRule);
 
 		return "redirect:/rules";
 	}
@@ -148,6 +151,38 @@ public class RulesController {
 
 	@PostMapping("/{id}/edit")
 	public String editRule(@PathVariable Long id, @ModelAttribute Rule rule) {
+		if (rule.minSlides != null && rule.maxSlides != null && rule.minSlides > rule.maxSlides) {
+			return "redirect:/rules/" + id + "/edit?minSlides=true";
+		}
+		if (rule.minSlideElements != null && rule.maxSlideElements != null && rule.minSlideElements > rule.maxSlideElements) {
+			return "redirect:/rules/" + id + "/edit?slideElements=true";
+		}
+		if (!rule.kaggle.matches("[1234567890,-]+") && !rule.kaggle.isEmpty()) {
+			return "redirect:/rules/" + id + "/kaggle=true";
+		}
+		if (rule.maxWords != null && rule.minWords != null && rule.minWords > rule.maxWords) {
+			return "redirect:/rules/" + id + "/minWords=true";
+		}
+		if (rule.maxSentences != null && rule.minSentences != null && rule.minSentences > rule.maxSentences) {
+			return "redirect:/rules/" + id + "/minSent=true";
+		}
+		if (rule.maxParagraphs != null && rule.minParagraphs != null && rule.minParagraphs > rule.maxParagraphs) {
+			return "redirect:/rules/" + id + "/edit?minPara=true";
+		}
+		if (!rule.slides.matches("[1234567890,-]+") && !rule.slides.isEmpty()) {
+			return "redirect:/rules/" + id + "/edit?Slide=true";
+		}
+		if (rule.minQuantity != null && rule.maxQuantity != null && rule.minQuantity > rule.maxQuantity) {
+			return "redirect:/rules/" + id + "/edit?minQuantity=true";
+		}
+		if (rule.minHeight != null && rule.maxHeight != null && rule.minHeight > rule.maxHeight) {
+			return "redirect:/rules/" + id + "/edit?minHeight=true";
+		}
+		if (rule.minWidth!= null && rule.maxWidth != null && rule.minWidth > rule.maxWidth) {
+			return "redirect:/rules/" + id + "/edit?minWidth=true";
+		}
+
+
 		Rule original = ruleService.findById(id);
 
 		ruleService.edit(original, rule);

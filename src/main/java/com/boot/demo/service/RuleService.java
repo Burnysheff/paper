@@ -5,6 +5,7 @@ import com.boot.demo.model.User;
 import com.boot.demo.model.rules.Rule;
 import com.boot.demo.repo.RuleRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -76,8 +77,17 @@ public class RuleService {
 	}
 
 	public List<Rule> getRulesUser() {
-		System.out.println();
 		return ruleRepository.findAllByOwner(((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
+	}
+	public List<Rule> getRulesNotUser() {
+		List<Rule> rules = this.getRules();
+		List<Rule> owners = ruleRepository.findAllByOwner(((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
+
+		for (Rule rule : owners) {
+			rules.remove(rule);
+		}
+
+		return rules;
 	}
 
 

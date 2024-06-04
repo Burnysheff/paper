@@ -21,15 +21,17 @@
 
             <label for="slides">Слайды:</label>
             <input type="text" id="slides" th:field="*{slides}" th:value="${rule.slides}"/>
+            <span th:if="${param.Slide}" style="color: red;">Может содержать только цифры и символы "," и "-"</span>
 
             <label for="invertSlides">Инвертированные слайды:</label>
             <input type="checkbox" id="invertSlides" th:field="*{invertSlides}" th:value="${rule.invertSlides}"/>
 
             <label for="minQuantity">Минимальное количество текстовых элементов:</label>
-            <input type="number" id="minQuantity" th:field="*{minQuantity}" th:value="${rule.minQuantity}"/>
+            <input type="number" id="minQuantity" th:field="*{minQuantity}" th:value="${rule.minQuantity}" min="0" oninput="validity.valid||(value='');"/>
 
             <label for="maxQuantity">Максимальное количество текстовых элементов:</label>
-            <input type="number" id="maxQuantity" th:field="*{maxQuantity}" th:value="${rule.maxQuantity}"/>
+            <input type="number" id="maxQuantity" th:field="*{maxQuantity}" th:value="${rule.maxQuantity}" min="0" oninput="validity.valid||(value='');"/>
+            <span th:if="${param.minQuantity}" style="color: red;">Минимум не может быть больше максимума</span>
 
             <label for="prefix">Префикс:</label>
             <input type="text" id="prefix" th:field="*{prefix}" th:value="${rule.prefix}"/>
@@ -49,28 +51,32 @@
             <label for="kaggle">Kaggle:</label>
             <input type="text" id="kaggle" th:field="*{kaggle}" th:value="${rule.kaggle}"/>
             <label for="invertKaggle">Запретить использование этих размеров шрифтов</label>
+            <span th:if="${param.kaggle}" style="color: red;">Может содержать только цифры и символы "," и "-"</span>
             <input type="checkbox" id="invertKaggle" th:field="*{invertKaggle}" th:value="${rule.invertKaggle}"/>
 
             <label for="hyperlinks">Гиперссылки:</label>
             <input type="checkbox" id="hyperlinks" th:field="*{hyperlinks}" th:value="${rule.hyperlinks}"/>
 
             <label for="maxWords">Макс. количество слов:</label>
-            <input type="number" id="maxWords" th:field="*{maxWords}" th:value="${rule.maxWords}"/>
+            <input type="number" id="maxWords" th:field="*{maxWords}" th:value="${rule.maxWords}" min="0" oninput="validity.valid||(value='');"/>
 
             <label for="maxSentences">Макс. количество предложений:</label>
-            <input type="number" id="maxSentences" th:field="*{maxSentences}" th:value="${rule.maxSentences}"/>
+            <input type="number" id="maxSentences" th:field="*{maxSentences}" th:value="${rule.maxSentences}" min="0" oninput="validity.valid||(value='');"/>
 
             <label for="maxParagraphs">Макс. количество абзацев:</label>
-            <input type="number" id="maxParagraphs" th:field="*{maxParagraphs}" th:value="${rule.maxParagraphs}"/>
+            <input type="number" id="maxParagraphs" th:field="*{maxParagraphs}" th:value="${rule.maxParagraphs}" min="0" oninput="validity.valid||(value='');"/>
 
             <label for="minWords">Мин. количество слов:</label>
-            <input type="number" id="minWords" th:field="*{minWords}" th:value="${rule.minWords}"/>
+            <input type="number" id="minWords" th:field="*{minWords}" th:value="${rule.minWords}" min="0" oninput="validity.valid||(value='');"/>
+            <span th:if="${param.minWords}" style="color: red;">Минимум не может быть больше максимума</span>
 
             <label for="minSentences">Мин. количество предложений:</label>
-            <input type="number" id="minSentences" th:field="*{minSentences}" th:value="${rule.minSentences}"/>
+            <input type="number" id="minSentences" th:field="*{minSentences}" th:value="${rule.minSentences}" min="0" oninput="validity.valid||(value='');"/>
+            <span th:if="${param.minSent}" style="color: red;">Минимум не может быть больше максимума</span>
 
             <label for="minParagraphs">Мин. количество абзацев:</label>
-            <input type="number" id="minParagraphs" th:field="*{minParagraphs}" th:value="${rule.minParagraphs}"/>
+            <input type="number" id="minParagraphs" th:field="*{minParagraphs}" th:value="${rule.minParagraphs}" min="0" oninput="validity.valid||(value='');"/>
+            <span th:if="${param.minPara}" style="color: red;">Минимум не может быть больше максимума</span>
 
             <label for="allowBold">Разрешить жирный шрифт:</label>
             <input type="checkbox" id="allowBold" th:field="*{allowBold}" th:value="${rule.allowBold}"/>
@@ -95,15 +101,17 @@
             <label>Имя: <input type="text" th:field="*{name}" th:value="${rule.name}"/></label>
             <label>Описание: <textarea th:field="*{description}" th:value="${rule.description}"></textarea></label>
             <label>Одинаковый фон: <input type="checkbox" th:field="*{sameBackground}" th:value="${rule.sameBackground}"/></label>
-            <label>Минимальное количество слайдов: <input type="number" th:field="*{minSlides}" th:value="${rule.minSlides}"/></label>
-            <label>Максимальное количество слайдов: <input type="number" th:field="*{maxSlides}" th:value="${rule.maxSlides}"/></label>
+            <label>Минимальное количество слайдов: <input type="number" th:field="*{minSlides}" th:value="${rule.minSlides}" min="0" oninput="validity.valid||(value='');"/></label>
+            <label>Максимальное количество слайдов: <input type="number" th:field="*{maxSlides}" th:value="${rule.maxSlides}" min="0" oninput="validity.valid||(value='');"/></label>
+            <span th:if="${param.minSlides}" style="color: red;">Минимум не может быть больше максимума</span>
             <label>Разрешен текст: <input type="checkbox" th:field="*{allowText}" th:value="${rule.allowText}"/></label>
             <label>Разрешены изображения: <input type="checkbox" th:field="*{allowImages}" th:value="${rule.allowImages}"/></label>
             <label>Разрешено видео: <input type="checkbox" th:field="*{allowVideo}" th:value="${rule.allowVideo}"/></label>
             <label>Разрешены диаграммы: <input type="checkbox" th:field="*{allowCharts}" th:value="${rule.allowCharts}"/></label>
             <label>Разрешены таблицы: <input type="checkbox" th:field="*{allowTables}" th:value="${rule.allowTables}"/></label>
-            <label>Максимальное количество элементов на слайде: <input type="number" th:field="*{maxSlideElements}" th:value="${rule.maxSlideElements}"/></label>
-            <label>Минимальное количество элементов на слайде: <input type="number" th:field="*{minSlideElements}" th:value="${rule.minSlideElements}"/></label>
+            <label>Максимальное количество элементов на слайде: <input type="number" th:field="*{maxSlideElements}" th:value="${rule.maxSlideElements}" min="0" oninput="validity.valid||(value='');"/></label>
+            <label>Минимальное количество элементов на слайде: <input type="number" th:field="*{minSlideElements}" th:value="${rule.minSlideElements}" min="0" oninput="validity.valid||(value='');"/></label>
+            <span th:if="${param.slideElements}" style="color: red;">Минимум не может быть больше максимума</span>
             <div class="buttons">
                 <button type="submit" class="btn">Сохранить изменения</button>
                 <a th:href="@{'/rules/' + ${rule.id}}" class="btn cancel">Отмена</a>
@@ -120,17 +128,20 @@
             <label for="slidesI">Слайды:</label>
             <input type="text" id="slidesI" th:field="*{slides}" th:value="${rule.slides}"/>
             <label for="minQuantityI">Минимальное количество картинок / видео:</label>
-            <input type="number" id="minQuantityI" th:field="*{minQuantity}" th:value="${rule.minQuantity}"/>
+            <input type="number" id="minQuantityI" th:field="*{minQuantity}" th:value="${rule.minQuantity}" min="0" oninput="validity.valid||(value='');"/>
             <label for="maxQuantityI">Максимальное количество картинок / видео:</label>
-            <input type="number" id="maxQuantityI" th:field="*{maxQuantity}" th:value="${rule.maxQuantity}"/>
+            <input type="number" id="maxQuantityI" th:field="*{maxQuantity}" th:value="${rule.maxQuantity}" min="0" oninput="validity.valid||(value='');"/>
+            <span th:if="${param.minQuantity}" style="color: red;">Минимум не может быть больше максимума</span>
             <label for="minHeight">Минимальная высота медиа-элемента:</label>
-            <input type="number" id="minHeight" th:field="*{minHeight}" th:value="${rule.minHeight}"/>
+            <input type="number" id="minHeight" th:field="*{minHeight}" th:value="${rule.minHeight}" min="0" oninput="validity.valid||(value='');"/>
             <label for="maxHeight">Максимальная высота медиа-элемента:</label>
-            <input type="number" id="maxHeight" th:field="*{maxHeight}" th:value="${rule.maxHeight}"/>
+            <input type="number" id="maxHeight" th:field="*{maxHeight}" th:value="${rule.maxHeight}" min="0" oninput="validity.valid||(value='');"/>
+            <span th:if="${param.minHeight}" style="color: red;">Минимум не может быть больше максимума</span>
             <label for="minWidth">Минимальная ширина медиа-элемента:</label>
-            <input type="number" id="minWidth" th:field="*{minWidth}" th:value="${rule.minWidth}"/>
+            <input type="number" id="minWidth" th:field="*{minWidth}" th:value="${rule.minWidth}" min="0" oninput="validity.valid||(value='');"/>
             <label for="maxWidth">Максимальная ширина медиа-элемента:</label>
-            <input type="number" id="maxWidth" th:field="*{maxWidth}" th:value="${rule.maxWidth}"/>
+            <input type="number" id="maxWidth" th:field="*{maxWidth}" th:value="${rule.maxWidth}" min="0" oninput="validity.valid||(value='');"/>
+            <span th:if="${param.minWidth}" style="color: red;">Минимум не может быть больше максимума</span>
             <div class="buttons">
                 <button type="submit" class="btn">Сохранить изменения</button>
                 <a th:href="@{'/rules/' + ${rule.id}}" class="btn cancel">Отмена</a>
