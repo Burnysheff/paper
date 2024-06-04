@@ -1,0 +1,31 @@
+body {
+    background-color: lightcyan;
+}
+
+a:link, a:visited {
+    text-decoration: none;
+    color: white;
+}
+
+.login {
+    background-color: #7DCEA0;
+    color: white;
+    padding: 20px 80px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    width: 100px;
+    margin-top: 240px;
+    margin-left: 40%;
+}
+
+.reg {
+    background-color: #7DCEA0;
+    color: white;
+    padding: 20px 80px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    width: 100px;
+    margin-left: 40%;
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать правило</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:if="${rule.attribute == 'TEXT'}">
+    <div class="container">
+        <h1 th:text="'Редактировать правило ' + ${rule.name}">Редактировать правило ИмяПравила</h1>
+        <form th:action="@{'/rules/' + ${rule.id} + '/edit'}" th:object="${rule}" method="post">
+            <label for="obligatory">Обязательно:</label>
+            <input type="checkbox" id="obligatory" th:field="*{obligatory}" th:value="${rule.obligatory}"/>
+
+            <label for="active">Активно:</label>
+            <input type="checkbox" id="active" th:field="*{active}" th:value="${rule.active}"/>
+
+            <label for="description">Описание:</label>
+            <textarea id="description" th:field="*{description}" th:value="${rule.description}"></textarea>
+
+            <label for="slides">Слайды:</label>
+            <input type="text" id="slides" th:field="*{slides}" th:value="${rule.slides}"/>
+
+            <label for="invertSlides">Инвертированные слайды:</label>
+            <input type="checkbox" id="invertSlides" th:field="*{invertSlides}" th:value="${rule.invertSlides}"/>
+
+            <label for="minQuantity">Минимальное количество текстовых элементов:</label>
+            <input type="number" id="minQuantity" th:field="*{minQuantity}" th:value="${rule.minQuantity}"/>
+
+            <label for="maxQuantity">Максимальное количество текстовых элементов:</label>
+            <input type="number" id="maxQuantity" th:field="*{maxQuantity}" th:value="${rule.maxQuantity}"/>
+
+            <label for="prefix">Префикс:</label>
+            <input type="text" id="prefix" th:field="*{prefix}" th:value="${rule.prefix}"/>
+            <label for="invertPrefix">Запретить использование этого префикса</label>
+            <input type="checkbox" id="invertPrefix" th:field="*{invertPrefix}" th:value="${rule.invertPrefix}"/>
+
+            <label for="postfix">Постфикс:</label>
+            <input type="text" id="postfix" th:field="*{postfix}" th:value="${rule.postfix}"/>
+            <label for="invertPostfix">Запретить использование этого постфикса</label>
+            <input type="checkbox" id="invertPostfix" th:field="*{invertPostfix}" th:value="${rule.invertPostfix}"/>
+
+            <label for="fonts">Шрифты:</label>
+            <input type="text" id="fonts" th:field="*{font}" th:value="${rule.font}"/>
+            <label for="invertFont">Запретить использование этих шрифтов</label>
+            <input type="checkbox" id="invertFont" th:field="*{invertFont}" th:value="${rule.invertFont}"/>
+
+            <label for="kaggle">Kaggle:</label>
+            <input type="text" id="kaggle" th:field="*{kaggle}" th:value="${rule.kaggle}"/>
+            <label for="invertKaggle">Запретить использование этих размеров шрифтов</label>
+            <input type="checkbox" id="invertKaggle" th:field="*{invertKaggle}" th:value="${rule.invertKaggle}"/>
+
+            <label for="hyperlinks">Гиперссылки:</label>
+            <input type="checkbox" id="hyperlinks" th:field="*{hyperlinks}" th:value="${rule.hyperlinks}"/>
+
+            <label for="maxWords">Макс. количество слов:</label>
+            <input type="number" id="maxWords" th:field="*{maxWords}" th:value="${rule.maxWords}"/>
+
+            <label for="maxSentences">Макс. количество предложений:</label>
+            <input type="number" id="maxSentences" th:field="*{maxSentences}" th:value="${rule.maxSentences}"/>
+
+            <label for="maxParagraphs">Макс. количество абзацев:</label>
+            <input type="number" id="maxParagraphs" th:field="*{maxParagraphs}" th:value="${rule.maxParagraphs}"/>
+
+            <label for="minWords">Мин. количество слов:</label>
+            <input type="number" id="minWords" th:field="*{minWords}" th:value="${rule.minWords}"/>
+
+            <label for="minSentences">Мин. количество предложений:</label>
+            <input type="number" id="minSentences" th:field="*{minSentences}" th:value="${rule.minSentences}"/>
+
+            <label for="minParagraphs">Мин. количество абзацев:</label>
+            <input type="number" id="minParagraphs" th:field="*{minParagraphs}" th:value="${rule.minParagraphs}"/>
+
+            <label for="allowBold">Разрешить жирный шрифт:</label>
+            <input type="checkbox" id="allowBold" th:field="*{allowBold}" th:value="${rule.allowBold}"/>
+
+            <label for="allowItalic">Разрешить курсив:</label>
+            <input type="checkbox" id="allowItalic" th:field="*{allowItalic}" th:value="${rule.allowItalic}"/>
+
+            <label for="allowUnderlined">Разрешить подчеркивание:</label>
+            <input type="checkbox" id="allowUnderlined" th:field="*{allowUnderlined}" th:value="${rule.allowUnderlined}"/>
+
+            <div class="buttons">
+                <button type="submit" class="btn">Сохранить изменения</button>
+                <a th:href="@{'/rules/' + ${rule.id}}" class="btn cancel">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:if="${rule.attribute == 'PRESENTATION'}">
+    <div class="container">
+        <form th:action="@{'/rules/' + ${rule.id} + '/edit'}" th:object="${rule}" method="post">
+            <label>Активный: <input type="checkbox" th:field="*{active}" th:value="${rule.active}"/></label>
+            <label>Имя: <input type="text" th:field="*{name}" th:value="${rule.name}"/></label>
+            <label>Описание: <textarea th:field="*{description}" th:value="${rule.description}"></textarea></label>
+            <label>Одинаковый фон: <input type="checkbox" th:field="*{sameBackground}" th:value="${rule.sameBackground}"/></label>
+            <label>Минимальное количество слайдов: <input type="number" th:field="*{minSlides}" th:value="${rule.minSlides}"/></label>
+            <label>Максимальное количество слайдов: <input type="number" th:field="*{maxSlides}" th:value="${rule.maxSlides}"/></label>
+            <label>Разрешен текст: <input type="checkbox" th:field="*{allowText}" th:value="${rule.allowText}"/></label>
+            <label>Разрешены изображения: <input type="checkbox" th:field="*{allowImages}" th:value="${rule.allowImages}"/></label>
+            <label>Разрешено видео: <input type="checkbox" th:field="*{allowVideo}" th:value="${rule.allowVideo}"/></label>
+            <label>Разрешены диаграммы: <input type="checkbox" th:field="*{allowCharts}" th:value="${rule.allowCharts}"/></label>
+            <label>Разрешены таблицы: <input type="checkbox" th:field="*{allowTables}" th:value="${rule.allowTables}"/></label>
+            <label>Максимальное количество элементов на слайде: <input type="number" th:field="*{maxSlideElements}" th:value="${rule.maxSlideElements}"/></label>
+            <label>Минимальное количество элементов на слайде: <input type="number" th:field="*{minSlideElements}" th:value="${rule.minSlideElements}"/></label>
+            <div class="buttons">
+                <button type="submit" class="btn">Сохранить изменения</button>
+                <a th:href="@{'/rules/' + ${rule.id}}" class="btn cancel">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:if="${rule.attribute == 'IMAGE'}">
+    <div class="container">
+        <form th:action="@{'/rules/' + ${rule.id} + '/edit'}" th:object="${rule}" method="post">
+            <label>Активный: <input type="checkbox" th:field="*{active}" th:value="${rule.active}"/></label>
+            <label>Имя: <input type="text" th:field="*{name}" th:value="${rule.name}"/></label>
+            <label>Описание: <textarea th:field="*{description}" th:value="${rule.description}"></textarea></label>
+            <label for="slidesI">Слайды:</label>
+            <input type="text" id="slidesI" th:field="*{slides}" th:value="${rule.slides}"/>
+            <label for="minQuantityI">Минимальное количество картинок / видео:</label>
+            <input type="number" id="minQuantityI" th:field="*{minQuantity}" th:value="${rule.minQuantity}"/>
+            <label for="maxQuantityI">Максимальное количество картинок / видео:</label>
+            <input type="number" id="maxQuantityI" th:field="*{maxQuantity}" th:value="${rule.maxQuantity}"/>
+            <label for="minHeight">Минимальная высота медиа-элемента:</label>
+            <input type="number" id="minHeight" th:field="*{minHeight}" th:value="${rule.minHeight}"/>
+            <label for="maxHeight">Максимальная высота медиа-элемента:</label>
+            <input type="number" id="maxHeight" th:field="*{maxHeight}" th:value="${rule.maxHeight}"/>
+            <label for="minWidth">Минимальная ширина медиа-элемента:</label>
+            <input type="number" id="minWidth" th:field="*{minWidth}" th:value="${rule.minWidth}"/>
+            <label for="maxWidth">Максимальная ширина медиа-элемента:</label>
+            <input type="number" id="maxWidth" th:field="*{maxWidth}" th:value="${rule.maxWidth}"/>
+            <div class="buttons">
+                <button type="submit" class="btn">Сохранить изменения</button>
+                <a th:href="@{'/rules/' + ${rule.id}}" class="btn cancel">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+<button onclick="history.back()">Назад</button>
+</body>
+</html>

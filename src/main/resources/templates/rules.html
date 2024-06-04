@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Правила</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .rules-list {
+            width: 45%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .rules-list h2 {
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .rule-item {
+            margin: 10px 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .rule-item:last-child {
+            border-bottom: none;
+        }
+        .rule-item h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .rule-item p {
+            margin: 5px 0;
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .button-container button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+        }
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+        hr {
+            border: none;
+            height: 2px;
+            color: #000000;
+            background-color: #333;
+            margin-top: 17px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="button-container">
+    <button onclick="location.href='/rules/create-rule'">Создать правило</button>
+    <button onclick="location.href='/home'">Назад</button>
+</div>
+
+<div class="container">
+    <div class="rules-list">
+        <h2>Правила пользователя</h2>
+        <div th:each="rule: ${userRules}" th:class="Rule">
+            <h3 th:text="${rule.name}">Название правила</h3>
+            <p><strong>Дата создания:</strong> <span th:text="${rule.dateCreate}">2023-01-01</span></p>
+            <p><strong>Аттрибут:</strong> <span th:text="${rule.attribute}">Аттрибут</span></p>
+            <p><strong>Описание:</strong> <span th:text="${rule.description}">Описание правила</span></p>
+            <p><strong>Активация:</strong> <input type="checkbox" th:checked="${rule.active}" disabled /></p>
+            <form th:action="@{/rules/{id}(id=${rule.Id})}" method="get">
+                <input type="submit" name="upvote" value="Показать правило" />
+            </form>
+            <hr>
+        </div>
+    </div>
+
+    <div class="rules-list">
+        <h2>Общедоступные правила</h2>
+        <div th:each="rule: ${publicRules}" class="Rule">
+            <h3 th:text="${rule.name}">Пулл правил</h3>
+            <p><strong>Дата создания:</strong> <span th:text="${rule.dateCreate}">2023-01-01</span></p>
+            <p><strong>Аттрибут:</strong> <span th:text="${rule.attribute}">Аттрибут</span></p>
+            <p><strong>Описание:</strong> <span th:text="${rule.description}">Описание правила</span></p>
+            <p><strong>Автор:</strong> <span th:text="${rule.author}">Имя автора</span></p>
+            <p><strong>Активация:</strong> <input type="checkbox" th:checked="${rule.active}" disabled /></p>
+            <form th:action="@{/rules/{id}(id=${rule.Id})}" method="post">
+                <input type="submit" name="upvote" value="Показать правило" />
+            </form>
+            <hr>
+        </div>
+    </div>
+</div>
+
+</body>

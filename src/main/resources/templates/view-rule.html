@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр правила</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:if="${rule.attribute == 'TEXT'}">
+    <div class="container">
+        <h1 th:text="'Правило ' + ${rule.name}">Правило ИмяПравила</h1>
+        <table>
+            <tr>
+                <th>Атрибут:</th>
+                <td th:text="${rule.attribute}">Пример атрибута</td>
+            </tr>
+            <tr>
+                <th>Обязательно:</th>
+                <td th:text="${rule.obligatory}">Пример обязательно</td>
+            </tr>
+            <tr>
+                <th>Активно:</th>
+                <td th:text="${rule.active}">Пример активно</td>
+            </tr>
+            <tr>
+                <th>Имя:</th>
+                <td th:text="${rule.name}">Пример имя</td>
+            </tr>
+            <tr>
+                <th>Дата создания:</th>
+                <td th:text="${#dates.format(rule.dateCreate, 'dd.MM.yyyy HH:mm')}">Пример дата создания</td>
+            </tr>
+            <tr>
+                <th>Автор:</th>
+                <td th:text="${rule.author}">Пример автор</td>
+            </tr>
+            <tr>
+                <th>Владелец:</th>
+                <td th:text="${rule.owner}">Пример владелец</td>
+            </tr>
+            <tr>
+                <th>Описание:</th>
+                <td th:text="${rule.description}">Пример описание</td>
+            </tr>
+            <tr>
+                <th>Слайды:</th>
+                <td th:text="${rule.slides}">Пример слайды</td>
+            </tr>
+            <tr>
+                <th>Инвертированные слайды:</th>
+                <td th:text="${rule.invertSlides}">Пример инвертированные слайды</td>
+            </tr>
+            <tr>
+                <th>Мин. количество:</th>
+                <td th:text="${rule.minQuantity}">Пример мин. количество</td>
+            </tr>
+            <tr>
+                <th>Макс. количество:</th>
+                <td th:text="${rule.maxQuantity}">Пример макс. количество</td>
+            </tr>
+            <tr>
+                <th>Префикс:</th>
+                <td th:text="${rule.prefix}">Пример префикс</td>
+            </tr>
+            <tr>
+                <th>Постфикс:</th>
+                <td th:text="${rule.postfix}">Пример постфикс</td>
+            </tr>
+            <tr>
+                <th>Шрифты:</th>
+                <td th:text="${rule.font}">Пример шрифты</td>
+            </tr>
+            <tr>
+                <th>Kaggle:</th>
+                <td th:text="${rule.kaggle}">Пример kaggle</td>
+            </tr>
+            <tr>
+                <th>Инвертированный префикс:</th>
+                <td th:text="${rule.invertPrefix}">Пример инвертированный префикс</td>
+            </tr>
+            <tr>
+                <th>Инвертированный постфикс:</th>
+                <td th:text="${rule.invertPostfix}">Пример инвертированный постфикс</td>
+            </tr>
+            <tr>
+                <th>Инвертированный Kaggle:</th>
+                <td th:text="${rule.invertKaggle}">Пример инвертированный Kaggle</td>
+            </tr>
+            <tr>
+                <th>Инвертированный шрифт:</th>
+                <td th:text="${rule.invertFont}">Пример инвертированный шрифт</td>
+            </tr>
+            <tr>
+                <th>Гиперссылки:</th>
+                <td th:text="${rule.hyperlinks}">Пример гиперссылки</td>
+            </tr>
+            <tr>
+                <th>Макс. слова:</th>
+                <td th:text="${rule.maxWords}">Пример макс. слова</td>
+            </tr>
+            <tr>
+                <th>Макс. предложения:</th>
+                <td th:text="${rule.maxSentences}">Пример макс. предложения</td>
+            </tr>
+            <tr>
+                <th>Макс. абзацы:</th>
+                <td th:text="${rule.maxParagraphs}">Пример макс. абзацы</td>
+            </tr>
+            <tr>
+                <th>Мин. слова:</th>
+                <td th:text="${rule.minWords}">Пример мин. слова</td>
+            </tr>
+            <tr>
+                <th>Мин. предложения:</th>
+                <td th:text="${rule.minSentences}">Пример мин. предложения</td>
+            </tr>
+            <tr>
+                <th>Мин. абзацы:</th>
+                <td th:text="${rule.minParagraphs}">Пример мин. абзацы</td>
+            </tr>
+            <tr>
+                <th>Разрешено жирное начертание:</th>
+                <td th:text="${rule.allowBold}">Пример разрешено жирное начертание</td>
+            </tr>
+            <tr>
+                <th>Разрешен курсив:</th>
+                <td th:text="${rule.allowItalic}">Пример разрешен курсив</td>
+            </tr>
+            <tr>
+                <th>Разрешено подчеркивание:</th>
+                <td th:text="${rule.allowUnderlined}">Пример разрешено подчеркивание</td>
+            </tr>
+        </table>
+    </div>
+    <div class="buttons">
+        <div th:if="${rule.owner != 'common'}">
+            <a th:href="@{'/rules/' + ${rule.id} + '/edit'}" class="btn">Редактировать правило</a>
+            <form th:action="@{'/rules/' + ${rule.id} + '/delete'}" method="post" style="display: inline;">
+                <button type="submit" class="btn delete">Удалить правило</button>
+            </form>
+            <button onclick="location.href='/rules'">Назад</button>
+        </div>
+    </div>
+</div>
+<div th:if="${rule.attribute == 'PRESENTATION'}">
+    <div class="container">
+        <h1 th:text="'Правило ' + ${rule.name}">Правило ИмяПравила</h1>
+        <table>
+            <tr>
+                <th>Поле</th>
+                <th>Значение</th>
+            </tr>
+            <tr>
+                <td>Обязательный:</td>
+                <td th:text="${rule.obligatory ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Активный:</td>
+                <td th:text="${rule.active ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Имя:</td>
+                <td th:text="${rule.name}"></td>
+            </tr>
+            <tr>
+                <td>Дата создания:</td>
+                <td th:text="${#dates.format(rule.dateCreate, 'dd-MM-yyyy')}"></td>
+            </tr>
+            <tr>
+                <td>Автор:</td>
+                <td th:text="${rule.author}"></td>
+            </tr>
+            <tr>
+                <td>Владелец:</td>
+                <td th:text="${rule.owner}"></td>
+            </tr>
+            <tr>
+                <td>Описание:</td>
+                <td th:text="${rule.description}"></td>
+            </tr>
+            <tr>
+                <td>Фон одинаковый:</td>
+                <td th:text="${rule.sameBackground ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Минимальное количество слайдов:</td>
+                <td th:text="${rule.minSlides}"></td>
+            </tr>
+            <tr>
+                <td>Максимальное количество слайдов:</td>
+                <td th:text="${rule.maxSlides}"></td>
+            </tr>
+            <tr>
+                <td>Разрешен текст:</td>
+                <td th:text="${rule.allowText ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Разрешены изображения:</td>
+                <td th:text="${rule.allowImages ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Разрешено видео:</td>
+                <td th:text="${rule.allowVideo ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Разрешены диаграммы:</td>
+                <td th:text="${rule.allowCharts ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Разрешены таблицы:</td>
+                <td th:text="${rule.allowTables ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Макс. элементов на слайде:</td>
+                <td th:text="${rule.maxSlideElements}"></td>
+            </tr>
+            <tr>
+                <td>Мин. элементов на слайде:</td>
+                <td th:text="${rule.minSlideElements}"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="buttons">
+        <div th:if="${rule.owner != 'common'}">
+            <a th:href="@{'/rules/' + ${rule.id} + '/edit'}" class="btn">Редактировать правило</a>
+            <form th:action="@{'/rules/' + ${rule.id} + '/delete'}" method="post" style="display: inline;">
+                <button type="submit" class="btn delete">Удалить правило</button>
+            </form>
+            <button onclick="location.href='/rules'">Назад</button>
+        </div>
+    </div>
+</div>
+<div th:if="${rule.attribute == 'IMAGE'}">
+    <div class="container">
+        <h1 th:text="'Правило ' + ${rule.name}">Правило ИмяПравила</h1>
+        <table>
+            <tr>
+                <th>Поле</th>
+                <th>Значение</th>
+            </tr>
+            <tr>
+                <td>Обязательный:</td>
+                <td th:text="${rule.obligatory ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Активный:</td>
+                <td th:text="${rule.active ? 'Да' : 'Нет'}"></td>
+            </tr>
+            <tr>
+                <td>Имя:</td>
+                <td th:text="${rule.name}"></td>
+            </tr>
+            <tr>
+                <td>Дата создания:</td>
+                <td th:text="${#dates.format(rule.dateCreate, 'dd-MM-yyyy')}"></td>
+            </tr>
+            <tr>
+                <td>Автор:</td>
+                <td th:text="${rule.author}"></td>
+            </tr>
+            <tr>
+                <td>Владелец:</td>
+                <td th:text="${rule.owner}"></td>
+            </tr>
+            <tr>
+                <td>Описание:</td>
+                <td th:text="${rule.description}"></td>
+            </tr>
+            <tr>
+                <th>Слайды:</th>
+                <td th:text="${rule.slides}">Пример слайды</td>
+            </tr>
+            <tr>
+                <th>Мин. количество:</th>
+                <td th:text="${rule.minQuantity}">Пример мин. количество</td>
+            </tr>
+            <tr>
+                <th>Макс. количество:</th>
+                <td th:text="${rule.maxQuantity}">Пример макс. количество</td>
+            </tr>
+            <tr>
+                <th>Минимальная высота:</th>
+                <td th:text="${rule.minHeight}">Пример мин. количество</td>
+            </tr>
+            <tr>
+                <th>Максимальная высота:</th>
+                <td th:text="${rule.maxHeight}">Пример макс. количество</td>
+            </tr>
+            <tr>
+                <th>Минимальная ширина:</th>
+                <td th:text="${rule.minWidth}">Пример мин. количество</td>
+            </tr>
+            <tr>
+                <th>Максимальная ширина:</th>
+                <td th:text="${rule.maxWidth}">Пример макс. количество</td>
+            </tr>
+        </table>
+    </div>
+    <div class="buttons">
+        <div th:if="${rule.owner != 'common'}">
+            <a th:href="@{'/rules/' + ${rule.id} + '/edit'}" class="btn">Редактировать правило</a>
+            <form th:action="@{'/rules/' + ${rule.id} + '/delete'}" method="post" style="display: inline;">
+                <button type="submit" class="btn delete">Удалить правило</button>
+            </form>
+            <button onclick="location.href='/rules'">Назад</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
