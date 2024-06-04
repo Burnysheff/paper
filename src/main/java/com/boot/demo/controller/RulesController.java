@@ -20,7 +20,7 @@ public class RulesController {
 
 	@GetMapping("")
 	public String home(Model model) {
-		List<Rule> rules = ruleService.getRules();
+		List<Rule> rules = ruleService.getRulesForUser();
 		List<Rule> common = ruleService.getCommon();
 
 		model.addAttribute("userRules", rules);
