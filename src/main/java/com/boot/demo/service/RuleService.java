@@ -108,6 +108,7 @@ public class RuleService {
 	}
 
 	public void saveRule(Rule rule) {
+		System.out.println(rule.getId());
 		ruleRepository.save(rule);
 	}
 

@@ -120,10 +120,13 @@ public class RulesController {
 		Rule rule = ruleService.findById(id);
 
 		Rule newRule = new Rule();
-		RuleService.copyFields(newRule, rule);
+
+		System.out.println(rule.getId());
+		RuleService.copyFields(rule, newRule);
 
 		newRule.setOwner(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
 
+		System.out.println(rule.getId());
 		ruleService.saveRule(newRule);
 
 		return "redirect:/rules";
