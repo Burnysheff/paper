@@ -96,8 +96,8 @@
             <p><strong>Описание:</strong> <span th:text="${rule.description}">Описание правила</span></p>
             <p><strong>Автор:</strong> <span th:text="${rule.author}">Имя автора</span></p>
             <p><strong>Активация:</strong> <input type="checkbox" th:checked="${rule.active}" disabled /></p>
-            <form th:action="@{/rules/{id}(id=${rule.Id})}" method="post">
-                <input type="submit" name="upvote" value="Показать правило" />
+            <form th:action="@{/rules/add/{id}(id=${rule.Id})}" method="post">
+                <input type="submit" name="upvote" value="Добавить правило себе" />
             </form>
             <hr>
         </div>

@@ -75,6 +75,12 @@ public class RuleService {
 		return ruleRepository.findAllByOwnerAndActive(((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString(), true);
 	}
 
+	public List<Rule> getRulesUser() {
+		System.out.println();
+		return ruleRepository.findAllByOwner(((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
+	}
+
+
 	public List<Rule> getRules() {
 		List<Rule> rules = new ArrayList<>();
 		ruleRepository.findAll().forEach(rules::add);
@@ -89,6 +95,10 @@ public class RuleService {
 	public RuleService(RuleRepository ruleRepository, UserService userService) {
 		this.ruleRepository = ruleRepository;
 		this.userService = userService;
+	}
+
+	public void saveRule(Rule rule) {
+		ruleRepository.save(rule);
 	}
 
 	public Rule findById(Long id) {

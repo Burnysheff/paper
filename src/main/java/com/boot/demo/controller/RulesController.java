@@ -1,8 +1,10 @@
 package com.boot.demo.controller;
 
 import com.boot.demo.dto.RuleForm;
+import com.boot.demo.model.User;
 import com.boot.demo.model.rules.Rule;
 import com.boot.demo.service.RuleService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,8 @@ public class RulesController {
 
 	@GetMapping("")
 	public String home(Model model) {
-		List<Rule> rules = ruleService.getRulesForUser();
-		List<Rule> common = ruleService.getCommon();
+		List<Rule> rules = ruleService.getRulesUser();
+		List<Rule> common = ruleService.getRules();
 
 		model.addAttribute("userRules", rules);
 		model.addAttribute("publicRules", common);
@@ -110,6 +112,17 @@ public class RulesController {
 		}
 		ruleForm.attribute = "PRESENTATION";
 		ruleService.createRule(ruleForm);
+		return "redirect:/rules";
+	}
+
+	@PostMapping("/add/{id}")
+	public String addRule(@PathVariable Long id) {
+		Rule rule = ruleService.findById(id);
+
+		rule.setOwner(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
+
+		ruleService.saveRule(rule);
+
 		return "redirect:/rules";
 	}
 
