@@ -56,6 +56,10 @@ public class HomeController {
 	}
 
 	@PostMapping("/upload") public String uploadFile(@RequestParam("file") MultipartFile file, Model model) throws IOException {
+		if (!file.getContentType().endsWith("openxmlformats-officedocument.presentationml.presentation")) {
+			return "redirect:/home?error=true";
+		}
+
 		ZipSecureFile.setMinInflateRatio(0);
 
 		File convFile = new File( "/Users/nick/Desktop/" + file.getName());

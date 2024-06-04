@@ -18,11 +18,15 @@ public class PresentationCheck {
 
 		for (Rule rule : rules) {
 			if (rule.attribute.equals("PRESENTATION") && rule.active) {
-				if (rule.minSlides > presentation.getSlides().size()) {
-					violations.add(violationConstructor(List.of(rule), "В презентации слишком мало слайдов!\n", 0));
+				if (rule.minSlides != null) {
+					if (rule.minSlides > presentation.getSlides().size()) {
+						violations.add(violationConstructor(List.of(rule), "В презентации слишком мало слайдов!\n", 0));
+					}
 				}
-				if (rule.maxSlides < presentation.getSlides().size()) {
-					violations.add(violationConstructor(List.of(rule), "В презентации слишком много слайдов!\n", 0));
+				if (rule.maxSlides != null) {
+					if (rule.maxSlides < presentation.getSlides().size()) {
+						violations.add(violationConstructor(List.of(rule), "В презентации слишком много слайдов!\n", 0));
+					}
 				}
 				for (int i = 0; i < presentation.getSlides().size(); ++i) {
 					if (!ruleMap.containsKey(i)) {
@@ -74,6 +78,9 @@ public class PresentationCheck {
 			totalVideos += videos;
 
 			List<Rule> rulesSlide = ruleMap.get(i);
+			if (rulesSlide == null) {
+				break;
+			}
 			for (Rule rule : rulesSlide) {
 				if (!rule.allowText && totalTextBoxes > 0) {
 					violations.add(violationConstructor(List.of(rule), "На слайде присутствует текст!\n", i + 1));
@@ -91,11 +98,15 @@ public class PresentationCheck {
 					violations.add(violationConstructor(List.of(rule), "На слайде присутствует видео!\n", i + 1));
 				}
 
-				if (totalTextBoxes + totalPictures + totalCharts + totalTables + totalVideos < rule.minSlideElements) {
-					violations.add(violationConstructor(List.of(rule), "На слайде слишком мало элементов!\n", i + 1));
+				if (rule.minSlideElements != null) {
+					if (totalTextBoxes + totalPictures + totalCharts + totalTables + totalVideos < rule.minSlideElements) {
+						violations.add(violationConstructor(List.of(rule), "На слайде слишком мало элементов!\n", i + 1));
+					}
 				}
-				if (totalTextBoxes + totalPictures + totalCharts + totalTables + totalVideos > rule.maxSlideElements) {
-					violations.add(violationConstructor(List.of(rule), "На слайде слишком много элементов!\n", i + 1));
+				if (rule.maxSlideElements != null) {
+					if (totalTextBoxes + totalPictures + totalCharts + totalTables + totalVideos > rule.maxSlideElements) {
+						violations.add(violationConstructor(List.of(rule), "На слайде слишком много элементов!\n", i + 1));
+					}
 				}
 			}
 		}

@@ -6,15 +6,15 @@ import java.util.List;
 public class RuleForm {
 	public String attribute;
 	public boolean sameBackground;
-	public int minSlides;
-	public int maxSlides;
+	public Integer minSlides;
+	public Integer maxSlides;
 	public boolean allowText;
 	public boolean allowImages;
 	public boolean allowVideo;
 	public boolean allowCharts;
 	public boolean allowTables;
-	public int maxSlideElements;
-	public int minSlideElements;
+	public Integer maxSlideElements;
+	public Integer minSlideElements;
 	public boolean obligatory;
 	public boolean active;
 	public String name;
@@ -22,19 +22,19 @@ public class RuleForm {
 	public Integer minQuantity;
 	public Integer maxQuantity;
 	public String slides;
-	public Boolean invertSlides;
+	public boolean invertSlides;
 	public String prefix;
 	public String postfix;
-	public List<String> fonts;
+	public String fonts;
 	public String fontSizes;
-	public Boolean prefixReverse;
-	public Boolean postfixReverse;
-	public Boolean fontReverse;
-	public Boolean sizeReverse;
-	public Boolean hyperlinks;
-	public Boolean underlined;
-	public Boolean italic;
-	public Boolean bold;
+	public boolean prefixReverse;
+	public boolean postfixReverse;
+	public boolean fontReverse;
+	public boolean sizeReverse;
+	public boolean hyperlinks;
+	public boolean underlined;
+	public boolean italic;
+	public boolean bold;
 	public Integer maxWords;
 	public Integer maxSentences;
 	public Integer maxParagraphs;
@@ -42,32 +42,25 @@ public class RuleForm {
 	public Integer minSentences;
 	public Integer minParagraphs;
 
-	public int minHeight;
-	public int minWidth;
-	public int maxHeight;
-	public int maxWidth;
+	public Integer minHeight;
+	public Integer minWidth;
+	public Integer maxHeight;
+	public Integer maxWidth;
 
-	public void setObligatory(boolean obligatory) {
-		this.obligatory = obligatory;
-	}
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public void setMinHeight(int minHeight) {
+	public void setMinHeight(Integer minHeight) {
 		this.minHeight = minHeight;
 	}
 
-	public void setMinWidth(int minWidth) {
+	public void setMinWidth(Integer minWidth) {
 		this.minWidth = minWidth;
 	}
 
-	public void setMaxHeight(int maxHeight) {
+	public void setMaxHeight(Integer maxHeight) {
 		this.maxHeight = maxHeight;
 	}
 
-	public void setMaxWidth(int maxWidth) {
+	public void setMaxWidth(Integer maxWidth) {
 		this.maxWidth = maxWidth;
 	}
 
@@ -79,28 +72,28 @@ public class RuleForm {
 		return active;
 	}
 
-	public int getMinHeight() {
+	public Integer getMinHeight() {
 		return minHeight;
 	}
 
-	public int getMinWidth() {
+	public Integer getMinWidth() {
 		return minWidth;
 	}
 
-	public int getMaxHeight() {
+	public Integer getMaxHeight() {
 		return maxHeight;
 	}
 
-	public int getMaxWidth() {
+	public Integer getMaxWidth() {
 		return maxWidth;
 	}
 
 	// Getters and Setters
-	public void setObligatory(Boolean obligatory) {
+	public void setObligatory(boolean obligatory) {
 		this.obligatory = obligatory;
 	}
 
-	public void setActive(Boolean active) {
+	public void setActive(boolean active) {
 		this.active = active;
 	}
 
@@ -124,15 +117,15 @@ public class RuleForm {
 		this.slides = slides;
 	}
 
-	public void setInvertSlides(Boolean invertSlides) {
+	public void setInvertSlides(boolean invertSlides) {
 		this.invertSlides = invertSlides;
 	}
 
-	public Boolean getObligatory() {
+	public boolean getObligatory() {
 		return obligatory;
 	}
 
-	public Boolean getActive() {
+	public boolean getActive() {
 		return active;
 	}
 
@@ -156,7 +149,7 @@ public class RuleForm {
 		return slides;
 	}
 
-	public Boolean getInvertSlides() {
+	public boolean getInvertSlides() {
 		return invertSlides;
 	}
 
@@ -176,11 +169,11 @@ public class RuleForm {
 		this.postfix = postfix;
 	}
 
-	public List<String> getFonts() {
+	public String getFonts() {
 		return fonts;
 	}
 
-	public void setFonts(List<String> fonts) {
+	public void setFonts(String fonts) {
 		this.fonts = fonts;
 	}
 
@@ -192,67 +185,67 @@ public class RuleForm {
 		this.fontSizes = fontSizes;
 	}
 
-	public Boolean getPrefixReverse() {
+	public boolean getPrefixReverse() {
 		return prefixReverse;
 	}
 
-	public void setPrefixReverse(Boolean prefixReverse) {
+	public void setPrefixReverse(boolean prefixReverse) {
 		this.prefixReverse = prefixReverse;
 	}
 
-	public Boolean getPostfixReverse() {
+	public boolean getPostfixReverse() {
 		return postfixReverse;
 	}
 
-	public void setPostfixReverse(Boolean postfixReverse) {
+	public void setPostfixReverse(boolean postfixReverse) {
 		this.postfixReverse = postfixReverse;
 	}
 
-	public Boolean getFontReverse() {
+	public boolean getFontReverse() {
 		return fontReverse;
 	}
 
-	public void setFontReverse(Boolean fontReverse) {
+	public void setFontReverse(boolean fontReverse) {
 		this.fontReverse = fontReverse;
 	}
 
-	public Boolean getSizeReverse() {
+	public boolean getSizeReverse() {
 		return sizeReverse;
 	}
 
-	public void setSizeReverse(Boolean sizeReverse) {
+	public void setSizeReverse(boolean sizeReverse) {
 		this.sizeReverse = sizeReverse;
 	}
 
-	public Boolean getHyperlinks() {
+	public boolean getHyperlinks() {
 		return hyperlinks;
 	}
 
-	public void setHyperlinks(Boolean hyperlinks) {
+	public void setHyperlinks(boolean hyperlinks) {
 		this.hyperlinks = hyperlinks;
 	}
 
-	public Boolean getUnderlined() {
+	public boolean getUnderlined() {
 		return underlined;
 	}
 
-	public void setUnderlined(Boolean underlined) {
+	public void setUnderlined(boolean underlined) {
 		this.underlined = underlined;
 	}
 
-	public Boolean getItalic() {
+	public boolean getItalic() {
 		return italic;
 	}
 
-	public void setItalic(Boolean italic) {
+	public void setItalic(boolean italic) {
 		this.italic = italic;
 	}
 
-	public Boolean getBold() {
+	public boolean getBold() {
 		return bold;
 	}
 
-	public void setBold(Boolean bold) {
+	public void setBold(boolean bold) {
 		this.bold = bold;
 	}
 
@@ -304,19 +297,15 @@ public class RuleForm {
 		this.minParagraphs = minParagraphs;
 	}
 
-	public void setAttribute(String attribute) {
-		this.attribute = attribute;
-	}
-
 	public void setSameBackground(boolean sameBackground) {
 		this.sameBackground = sameBackground;
 	}
 
-	public void setMinSlides(int minSlides) {
+	public void setMinSlides(Integer minSlides) {
 		this.minSlides = minSlides;
 	}
 
-	public void setMaxSlides(int maxSlides) {
+	public void setMaxSlides(Integer maxSlides) {
 		this.maxSlides = maxSlides;
 	}
 
@@ -340,27 +329,23 @@ public class RuleForm {
 		this.allowTables = allowTables;
 	}
 
-	public void setMaxSlideElements(int maxSlideElements) {
+	public void setMaxSlideElements(Integer maxSlideElements) {
 		this.maxSlideElements = maxSlideElements;
 	}
 
-	public void setMinSlideElements(int minSlideElements) {
+	public void setMinSlideElements(Integer minSlideElements) {
 		this.minSlideElements = minSlideElements;
-	}
-
-	public String getAttribute() {
-		return attribute;
 	}
 
 	public boolean isSameBackground() {
 		return sameBackground;
 	}
 
-	public int getMinSlides() {
+	public Integer getMinSlides() {
 		return minSlides;
 	}
 
-	public int getMaxSlides() {
+	public Integer getMaxSlides() {
 		return maxSlides;
 	}
 
@@ -384,11 +369,11 @@ public class RuleForm {
 		return allowTables;
 	}
 
-	public int getMaxSlideElements() {
+	public Integer getMaxSlideElements() {
 		return maxSlideElements;
 	}
 
-	public int getMinSlideElements() {
+	public Integer getMinSlideElements() {
 		return minSlideElements;
 	}
 }

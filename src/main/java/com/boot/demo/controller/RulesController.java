@@ -64,6 +64,18 @@ public class RulesController {
 		if (!ruleForm.slides.matches("[1234567890,-]+") && !ruleForm.slides.isEmpty()) {
 			return "redirect:/rules/create-rule/text?type=code&errorSlides=true";
 		}
+		if (ruleForm.minQuantity != null && ruleForm.maxQuantity != null && ruleForm.minQuantity > ruleForm.maxQuantity) {
+			return "redirect:/rules/create-rule/text?type=code&errorQuantity=true";
+		}
+		if (ruleForm.maxWords != null && ruleForm.minWords != null && ruleForm.minWords > ruleForm.maxWords) {
+			return "redirect:/rules/create-rule/text?type=code&errorWords=true";
+		}
+		if (ruleForm.maxSentences != null && ruleForm.minSentences != null && ruleForm.minSentences > ruleForm.maxSentences) {
+			return "redirect:/rules/create-rule/text?type=code&errorSent=true";
+		}
+		if (ruleForm.maxParagraphs != null && ruleForm.minParagraphs != null && ruleForm.minParagraphs > ruleForm.maxParagraphs) {
+			return "redirect:/rules/create-rule/text?type=code&errorPar=true";
+		}
 		ruleForm.attribute = "TEXT";
 		ruleService.createRule(ruleForm);
 		return "redirect:/rules";
@@ -74,6 +86,15 @@ public class RulesController {
 		if (!ruleForm.slides.matches("[1234567890,-]+") && !ruleForm.slides.isEmpty()) {
 			return "redirect:/rules/create-rule/text?type=image&errorSlides=true";
 		}
+		if (ruleForm.minQuantity != null && ruleForm.maxQuantity != null && ruleForm.minQuantity > ruleForm.maxQuantity) {
+			return "redirect:/rules/create-rule/text?type=image&errorQuantityImage=true";
+		}
+		if (ruleForm.minHeight != null && ruleForm.maxHeight != null && ruleForm.minHeight > ruleForm.maxHeight) {
+			return "redirect:/rules/create-rule/text?type=image&errorHeight=true";
+		}
+		if (ruleForm.minWidth!= null && ruleForm.maxWidth != null && ruleForm.minWidth > ruleForm.maxWidth) {
+			return "redirect:/rules/create-rule/text?type=image&errorWidth=true";
+		}
 		ruleForm.attribute = "IMAGE";
 		ruleService.createRule(ruleForm);
 		return "redirect:/rules";
@@ -81,6 +102,12 @@ public class RulesController {
 
 	@PostMapping("/create-rule/submit/presentation")
 	public String submitPresentation(@ModelAttribute RuleForm ruleForm) {
+		if (ruleForm.minSlides != null && ruleForm.maxSlides != null && ruleForm.minSlides > ruleForm.maxSlides) {
+			return "redirect:/rules/create-rule/text?type=presentation&Slides=true";
+		}
+		if (ruleForm.minSlideElements != null && ruleForm.maxSlideElements != null && ruleForm.minSlideElements > ruleForm.maxSlideElements) {
+			return "redirect:/rules/create-rule/text?type=presentation&errorQuantitySlides=true";
+		}
 		ruleForm.attribute = "PRESENTATION";
 		ruleService.createRule(ruleForm);
 		return "redirect:/rules";
@@ -89,6 +116,7 @@ public class RulesController {
 	@GetMapping("/{id}")
 	public String viewRule(@PathVariable Long id, Model model) {
 		Rule rule = ruleService.findById(id);
+
 		model.addAttribute("rule", rule);
 		return "view-rule";
 	}
@@ -109,12 +137,7 @@ public class RulesController {
 	public String editRule(@PathVariable Long id, @ModelAttribute Rule rule) {
 		Rule original = ruleService.findById(id);
 
-		rule.setAuthor(original.getAuthor());
-		rule.setOwner(original.getOwner());
-		rule.setAttribute(original.getAttribute());
-		rule.setDateCreate(original.getDateCreate());
-
-		ruleService.edit(rule);
+		ruleService.edit(original, rule);
 		return "redirect:/rules/" + rule.getId();
 	}
 

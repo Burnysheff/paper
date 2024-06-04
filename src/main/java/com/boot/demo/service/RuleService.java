@@ -21,81 +21,36 @@ public class RuleService {
 	public void createRule(RuleForm ruleForm) {
 		Rule rule = new Rule();
 
+		rule.setAttribute(ruleForm.attribute);
 		rule.setAuthor(((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName());
 		rule.setOwner(((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
-		rule.setAttribute(ruleForm.attribute);
 		rule.setDateCreate(Date.from(Instant.now()));
 		rule.setObligatory(ruleForm.obligatory);
 		rule.setActive(ruleForm.active);
 		rule.setName(ruleForm.name);
 		rule.setDescription(ruleForm.description);
-		if (ruleForm.minQuantity != null) {
-			rule.setMinQuantity(ruleForm.minQuantity);
-		}
-		if (ruleForm.maxQuantity != null) {
-			rule.setMaxQuantity(ruleForm.maxQuantity);
-		}
-		if (ruleForm.slides != null) {
-			rule.setSlides(ruleForm.slides);
-		}
-		if (ruleForm.invertSlides != null) {
-			rule.setInvertSlides(ruleForm.invertSlides);
-		}
-		if (ruleForm.prefix != null) {
-			rule.setPrefix(ruleForm.prefix);
-		}
-		if (ruleForm.postfix != null) {
-			rule.setPostfix(ruleForm.postfix);
-		}
-		if (ruleForm.fonts != null) {
-			rule.setFont(ruleForm.fonts.toString());
-		}
-		if (ruleForm.fontSizes != null) {
-			rule.setKaggle(ruleForm.fontSizes.toString());
-		}
-		if (ruleForm.prefixReverse != null) {
-			rule.setInvertPrefix(ruleForm.prefixReverse);
-		}
-		if (ruleForm.postfixReverse != null) {
-			rule.setInvertPostfix(ruleForm.postfixReverse);
-		}
-		if (ruleForm.fontReverse != null) {
-			rule.setInvertFont(ruleForm.fontReverse);
-		}
-		if (ruleForm.sizeReverse != null) {
-			rule.setInvertKaggle(ruleForm.sizeReverse);
-		}
-		if (ruleForm.hyperlinks != null) {
-			rule.setHyperlinks(ruleForm.hyperlinks);
-		}
-		if (ruleForm.underlined != null) {
-			rule.setAllowUnderlined(ruleForm.underlined);
-		}
-		if (ruleForm.italic != null) {
-			rule.setAllowItalic(ruleForm.italic);
-		}
-		if (ruleForm.bold != null) {
-			rule.setAllowBold(ruleForm.bold);
-		}
-		if (ruleForm.maxWords != null) {
-			rule.setMaxWords(ruleForm.maxWords);
-		}
-		if (ruleForm.maxSentences != null) {
-			rule.setMaxSentences(ruleForm.maxSentences);
-		}
-		if (ruleForm.maxParagraphs != null) {
-			rule.setMaxParagraphs(ruleForm.maxParagraphs);
-		}
-		if (ruleForm.minWords != null) {
-			rule.setMinWords(ruleForm.minWords);
-		}
-		if (ruleForm.minSentences != null) {
-			rule.setMinSentences(ruleForm.minSentences);
-		}
-		if (ruleForm.minParagraphs != null) {
-			rule.setMinParagraphs(ruleForm.minParagraphs);
-		}
-
+		rule.setMinQuantity(ruleForm.minQuantity);
+		rule.setMaxQuantity(ruleForm.maxQuantity);
+		rule.setSlides(ruleForm.slides);
+		rule.setInvertSlides(ruleForm.invertSlides);
+		rule.setPrefix(ruleForm.prefix);
+		rule.setPostfix(ruleForm.postfix);
+		rule.setFont(ruleForm.fonts);
+		rule.setKaggle(ruleForm.fontSizes);
+		rule.setInvertPrefix(ruleForm.prefixReverse);
+		rule.setInvertPostfix(ruleForm.postfixReverse);
+		rule.setInvertFont(ruleForm.fontReverse);
+		rule.setInvertKaggle(ruleForm.sizeReverse);
+		rule.setHyperlinks(ruleForm.hyperlinks);
+		rule.setAllowUnderlined(ruleForm.underlined);
+		rule.setAllowItalic(ruleForm.italic);
+		rule.setAllowBold(ruleForm.bold);
+		rule.setMaxWords(ruleForm.maxWords);
+		rule.setMaxSentences(ruleForm.maxSentences);
+		rule.setMaxParagraphs(ruleForm.maxParagraphs);
+		rule.setMinWords(ruleForm.minWords);
+		rule.setMinSentences(ruleForm.minSentences);
+		rule.setMinParagraphs(ruleForm.minParagraphs);
 		rule.setSameBackground(ruleForm.sameBackground);
 		rule.setMinSlides(ruleForm.minSlides);
 		rule.setMaxSlides(ruleForm.maxSlides);
@@ -140,7 +95,90 @@ public class RuleService {
 		return ruleRepository.findById(id).get();
 	}
 
-	public void edit(Rule rule) {
+	public void edit(Rule original, Rule rule) {
+		// String поля
+		if (rule.getAttribute() == null && original.getAttribute() != null) {
+			rule.setAttribute(original.getAttribute());
+		}
+		if (rule.getName() == null && original.getName() != null) {
+			rule.setName(original.getName());
+		}
+		if (rule.getAuthor() == null && original.getAuthor() != null) {
+			rule.setAuthor(original.getAuthor());
+		}
+		if (rule.getOwner() == null && original.getOwner() != null) {
+			rule.setOwner(original.getOwner());
+		}
+		if (rule.getDescription() == null && original.getDescription() != null) {
+			rule.setDescription(original.getDescription());
+		}
+		if (rule.getSlides() == null && original.getSlides() != null) {
+			rule.setSlides(original.getSlides());
+		}
+		if (rule.getPrefix() == null && original.getPrefix() != null) {
+			rule.setPrefix(original.getPrefix());
+		}
+		if (rule.getPostfix() == null && original.getPostfix() != null) {
+			rule.setPostfix(original.getPostfix());
+		}
+		if (rule.getFont() == null && original.getFont() != null) {
+			rule.setFont(original.getFont());
+		}
+		if (rule.getKaggle() == null && original.getKaggle() != null) {
+			rule.setKaggle(original.getKaggle());
+		}
+
+// Integer поля
+		if (rule.getMinSlides() == null && original.getMinSlides() != null) {
+			rule.setMinSlides(original.getMinSlides());
+		}
+		if (rule.getMaxSlides() == null && original.getMaxSlides() != null) {
+			rule.setMaxSlides(original.getMaxSlides());
+		}
+		if (rule.getMaxSlideElements() == null && original.getMaxSlideElements() != null) {
+			rule.setMaxSlideElements(original.getMaxSlideElements());
+		}
+		if (rule.getMinSlideElements() == null && original.getMinSlideElements() != null) {
+			rule.setMinSlideElements(original.getMinSlideElements());
+		}
+		if (rule.getMinQuantity() == null && original.getMinQuantity() != null) {
+			rule.setMinQuantity(original.getMinQuantity());
+		}
+		if (rule.getMaxQuantity() == null && original.getMaxQuantity() != null) {
+			rule.setMaxQuantity(original.getMaxQuantity());
+		}
+		if (rule.getMaxWords() == null && original.getMaxWords() != null) {
+			rule.setMaxWords(original.getMaxWords());
+		}
+		if (rule.getMaxSentences() == null && original.getMaxSentences() != null) {
+			rule.setMaxSentences(original.getMaxSentences());
+		}
+		if (rule.getMaxParagraphs() == null && original.getMaxParagraphs() != null) {
+			rule.setMaxParagraphs(original.getMaxParagraphs());
+		}
+		if (rule.getMinWords() == null && original.getMinWords() != null) {
+			rule.setMinWords(original.getMinWords());
+		}
+		if (rule.getMinSentences() == null && original.getMinSentences() != null) {
+			rule.setMinSentences(original.getMinSentences());
+		}
+		if (rule.getMinParagraphs() == null && original.getMinParagraphs() != null) {
+			rule.setMinParagraphs(original.getMinParagraphs());
+		}
+		if (rule.getMinHeight() == null && original.getMinHeight() != null) {
+			rule.setMinHeight(original.getMinHeight());
+		}
+		if (rule.getMinWidth() == null && original.getMinWidth() != null) {
+			rule.setMinWidth(original.getMinWidth());
+		}
+		if (rule.getMaxHeight() == null && original.getMaxHeight() != null) {
+			rule.setMaxHeight(original.getMaxHeight());
+		}
+		if (rule.getMaxWidth() == null && original.getMaxWidth() != null) {
+			rule.setMaxWidth(original.getMaxWidth());
+		}
+
+
 		ruleRepository.save(rule);
 	}
 

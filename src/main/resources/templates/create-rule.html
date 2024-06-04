@@ -185,12 +185,13 @@
       </label>
       <label>
         Минимальное количество слайдов:
-        <input type="number" id="minSlidesP" name="minSlides" th:field="*{minSlides}">
+        <input type="number" id="minSlidesP" name="minSlides" th:field="*{minSlides}" min="0" oninput="validity.valid||(value='');">
       </label>
       <label>
         Максимальное количество слайдов:
-        <input type="number" id="maxSlidesP" name="maxSlides" th:field="*{maxSlides}">
+        <input type="number" id="maxSlidesP" name="maxSlides" th:field="*{maxSlides}" min="0" oninput="validity.valid||(value='');">
       </label>
+      <span th:if="${param.Slides}" style="color: red;">Минимальное число слайдов не может быть больше максимального</span>
       <label>
         Разрешить текст в презентации:
         <input type="checkbox" id="allowTextP" name="allowText" th:field="*{allowText}">
@@ -213,12 +214,13 @@
       </label>
       <label>
         Максимальное количество элементов на слайде:
-        <input type="number" id="maxSlideElementsP" name="maxSlideElements" th:field="*{maxSlideElements}">
+        <input type="number" id="maxSlideElementsP" name="maxSlideElements" th:field="*{maxSlideElements}" min="0" oninput="validity.valid||(value='');">
       </label>
       <label>
         Минимальные количество элементов на слайде:
-        <input type="number" id="minSlideElementsP" name="minSlideElements" th:field="*{minSlideElements}">
+        <input type="number" id="minSlideElementsP" name="minSlideElements" th:field="*{minSlideElements}" min="0" oninput="validity.valid||(value='');">
       </label>
+      <span th:if="${param.errorQuantitySlides}" style="color: red;">Минимальное число элементов не может быть больше максимального</span>
       <div class="form-group">
         <input type="submit" value="Создать">
       </div>
@@ -243,13 +245,14 @@
           </div>
           <hr>
           <div class="form-group">
-            <label for="minQuantity">Максимальное число текстовых элементов на слайде</label>
-            <input type="number" id="minQuantity" name="minQuantity" th:field="*{minQuantity}" placeholder="10">
+            <label for="minQuantity">Минимальное число текстовых элементов на слайде</label>
+            <input type="number" id="minQuantity" name="minQuantity" th:field="*{minQuantity}" placeholder="10" min="0" oninput="validity.valid||(value='');">
           </div>
           <div class="form-group">
-            <label for="maxQuantity">Минимальное число текстовых элементов на слайде</label>
-            <input type="number" id="maxQuantity" name="maxQuantity" th:field="*{maxQuantity}" placeholder="1">
+            <label for="maxQuantity">Максимальное число текстовых элементов на слайде</label>
+            <input type="number" id="maxQuantity" name="maxQuantity" th:field="*{maxQuantity}" placeholder="1" min="0" oninput="validity.valid||(value='');">
           </div>
+          <span th:if="${param.errorQuantity}" style="color: red;">Минимальное число элементов не может быть больше максимального</span>
           <div class="form-group">
             <label for="slides">Номера слайдов</label>
             <input type="text" id="slides" name="slides" th:field="*{slides}" placeholder="1,3,5-10,16,18">
@@ -293,28 +296,31 @@
 
           <div class="form-group">
             <label for="maxWords">Максимальное число слов</label>
-            <input type="number" id="maxWords" name="maxWords" th:field="*{maxWords}" placeholder="10">
+            <input type="number" id="maxWords" name="maxWords" th:field="*{maxWords}" placeholder="10" min="0" oninput="validity.valid||(value='');">
           </div>
           <div class="form-group">
             <label for="maxSentences">Максимальное число предложений</label>
-            <input type="number" id="maxSentences" name="maxSentences" th:field="*{maxSentences}" placeholder="10">
+            <input type="number" id="maxSentences" name="maxSentences" th:field="*{maxSentences}" placeholder="10" min="0" oninput="validity.valid||(value='');">
           </div>
           <div class="form-group">
             <label for="maxParagraphs">Максимальное число абзацев</label>
-            <input type="number" id="maxParagraphs" name="maxParagraphs" th:field="*{maxParagraphs}" placeholder="10">
+            <input type="number" id="maxParagraphs" name="maxParagraphs" th:field="*{maxParagraphs}" placeholder="10" min="0" oninput="validity.valid||(value='');">
           </div>
           <div class="form-group">
             <label for="minWords">Минимальное число слов</label>
-            <input type="number" id="minWords" name="minWords" th:field="*{minWords}" placeholder="1">
+            <input type="number" id="minWords" name="minWords" th:field="*{minWords}" placeholder="1" min="0" oninput="validity.valid||(value='');">
           </div>
+          <span th:if="${param.errorWords}" style="color: red;">Минимальное число слов не может быть больше максимального</span>
           <div class="form-group">
             <label for="minSentences">Минимальное число предложений</label>
-            <input type="number" id="minSentences" name="minSentences" th:field="*{minSentences}" placeholder="1">
+            <input type="number" id="minSentences" name="minSentences" th:field="*{minSentences}" placeholder="1" min="0" oninput="validity.valid||(value='');">
           </div>
+          <span th:if="${param.errorSent}" style="color: red;">Минимальное число предложений не может быть больше максимального</span>
           <div class="form-group">
             <label for="minParagraphs">Минимальное число абзацев</label>
-            <input type="number" id="minParagraphs" name="minParagraphs" th:field="*{minParagraphs}" placeholder="1">
+            <input type="number" id="minParagraphs" name="minParagraphs" th:field="*{minParagraphs}" placeholder="1" min="0" oninput="validity.valid||(value='');">
           </div>
+          <span th:if="${param.errorPar}" style="color: red;">Минимальное число параграфов не может быть больше максимального</span>
 
           <div class="form-group">
             <input type="submit" value="Создать">
@@ -322,7 +328,7 @@
         </form>
   </div>
   <div id="image" class="content">
-    <h1>Правила для текста</h1>
+    <h1>Правила для картинок / видео</h1>
     <form th:action="@{/rules/create-rule/submit/image}" th:object="${ruleForm}" method="post">
       <label><input type="checkbox" id="obligatoryI" name="obligatoryI" th:field="*{obligatory}">Элемент обязательно должен быть на слайде</label>
       <label><input type="checkbox" id="activeI" name="activeI" th:field="*{active}">Активное правило</label>
@@ -346,6 +352,7 @@
 
       <label for="maxQuantityI">Минимальное число картинок / видео элементов на слайде</label>
       <input type="number" id="maxQuantityI" name="maxQuantity" th:field="*{maxQuantity}" placeholder="1">
+      <span th:if="${param.errorQuantityImage}" style="color: red;">Минимальное число элементов не может быть больше максимального</span>
       <br/>
       <div class="form-group">
         <label for="maxHeight">Максимальная высота картинки / видео</label>
@@ -355,6 +362,7 @@
         <label for="minHeight">Минимальная высота картинки / видео</label>
         <input type="number" id="minHeight" name="minHeight" th:field="*{minHeight}" placeholder="1">
       </div>
+      <span th:if="${param.errorHeight}" style="color: red;">Минимальная высота не может быть больше максимальной</span>
       <div class="form-group">
         <label for="maxWidth">Максимальная ширина картинки / видео</label>
         <input type="number" id="maxWidth" name="maxWidth" th:field="*{maxWidth}" placeholder="100">
@@ -363,6 +371,7 @@
         <label for="minWidth">Минимальная ширина картинки / видео</label>
         <input type="number" id="minWidth" name="minWidth" th:field="*{minWidth}" placeholder="1">
       </div>
+      <span th:if="${param.errorWidth}" style="color: red;">Минимальная ширина не может быть больше максимальной</span>
       <label class="checkbox-item"><input type="checkbox" id="hyperlinksI" name="hyperlinksI" th:field="*{hyperlinks}"> Разрешить использование гиперссылок</label>
       <div class="form-group">
         <input type="submit" value="Создать">

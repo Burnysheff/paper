@@ -119,6 +119,10 @@
     </table>
   </div>
   <div th:if="${check.rulesNumber != 0}">
+    <div th:if="${check.violationList.size() == 0}">
+      <h2>Проверка успешно завершена, правила не нарушены!</h2>
+    </div>
+    <div th:if="!${check.violationList.size() == 0}">
     <h2>Результаты проверки</h2>
     <div th:each="violation : ${check.violationList}" th:class="Violation">
       <div class="description" style="white-space: pre-line" th:utext="'Описание: ' + ${violation.description}"></div>
@@ -133,6 +137,7 @@
       </div>
       <br>
     </div>
+  </div>
   </div>
   <div th:if="${check.rulesNumber == 0}">
     <h2>Правил не было создано!</h2>

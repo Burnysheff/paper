@@ -38,6 +38,7 @@
     <div class="mb-3">
       <label for="file" class="form-label">Выберите файл презентации:</label>
       <input type="file" class="form-control" id="file" name="file" required>
+      <span th:if="${param.error}" style="color: red;">Файл должен быть формата .ppx</span>
     </div>
     <button type="submit" class="btn btn-primary btn-custom">Загрузить и проверить</button>
   </form>

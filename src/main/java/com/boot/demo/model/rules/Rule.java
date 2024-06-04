@@ -30,7 +30,6 @@ public class Rule {
 	@Column(name = "active")
 	public boolean active;
 
-
 	@Column(name = "name")
 	public String name;
 	@Column(name = "date_create")
@@ -46,9 +45,9 @@ public class Rule {
 	@Column(name = "sameBackground")
 	public boolean sameBackground;
 	@Column(name = "minSlides")
-	public int minSlides;
+	public Integer minSlides;
 	@Column(name = "maxSlides")
-	public int maxSlides;
+	public Integer maxSlides;
 	@Column(name = "allowText")
 	public boolean allowText;
 	@Column(name = "allowImages")
@@ -60,21 +59,21 @@ public class Rule {
 	@Column(name = "allowTables")
 	public boolean allowTables;
 	@Column(name = "maxSlideElements")
-	public int maxSlideElements;
+	public Integer maxSlideElements;
 	@Column(name = "minSlideElements")
-	public int minSlideElements;
+	public Integer minSlideElements;
 
 
 	// Common for elements
 	@Column(name = "slides")
 	public String slides;
 	@Column(name = "invert_slides")
-	public Boolean invertSlides;
+	public boolean invertSlides;
 
 	@Column(name = "minQuantity")
-	public int minQuantity;
+	public Integer minQuantity;
 	@Column(name = "maxQuantity")
-	public int maxQuantity;
+	public Integer maxQuantity;
 
 	// Text fields
 	@Column(name = "prefix")
@@ -96,17 +95,17 @@ public class Rule {
 	@Column(name = "hyperlinks")
 	public boolean hyperlinks;
 	@Column(name = "maxWords")
-	public int maxWords;
+	public Integer maxWords;
 	@Column(name = "maxSentences")
-	public int maxSentences;
+	public Integer maxSentences;
 	@Column(name = "maxParagraphs")
-	public int maxParagraphs;
+	public Integer maxParagraphs;
 	@Column(name = "minWords")
-	public int minWords;
+	public Integer minWords;
 	@Column(name = "minSentences")
-	public int minSentences;
+	public Integer minSentences;
 	@Column(name = "minParagraphs")
-	public int minParagraphs;
+	public Integer minParagraphs;
 	@Column(name = "allowBold")
 	public boolean allowBold;
 	@Column(name = "allowItalic")
@@ -115,13 +114,13 @@ public class Rule {
 	public boolean allowUnderlined;
 
 	@Column(name = "min_height")
-	public int minHeight;
+	public Integer minHeight;
 	@Column(name = "min_width")
-	public int minWidth;
+	public Integer minWidth;
 	@Column(name = "height")
-	public int maxHeight;
+	public Integer maxHeight;
 	@Column(name = "width")
-	public int maxWidth;
+	public Integer maxWidth;
 
 	public Rule(String name, String desc, String author, boolean active) {
 		this.name = name;

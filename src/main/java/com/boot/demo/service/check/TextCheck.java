@@ -6,6 +6,7 @@ import org.apache.poi.xslf.usermodel.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 @Service
 public class TextCheck {
@@ -37,7 +38,13 @@ public class TextCheck {
 
 		for (Rule rule : rules) {
 			if (rule.attribute.equals("TEXT") && rule.active) {
-				List<Integer> slides = parseString(rule.slides);
+				List<Integer> slides;
+				System.out.println("Slides is   " + rule.slides);
+				if (rule.slides != null && rule.slides.trim().equals("")) {
+					slides = parseString(rule.slides);
+				} else {
+					slides = IntStream.rangeClosed(0, presentation.getSlides().size() - 1).boxed().toList();;
+				}
 				for (int i = 0; i < presentation.getSlides().size(); ++i) {
 					if ((!rule.invertSlides && slides.contains(i)) || (rule.invertSlides && !slides.contains(i))) {
 						if (!ruleMap.containsKey(i)) {
@@ -56,10 +63,10 @@ public class TextCheck {
 		for (Integer slide : ruleMap.keySet()) {
 			List<Rule> allowed = new ArrayList<>();
 			for (Rule rule : ruleMap.get(slide)) {
-				if (rule.minQuantity != 0 && rule.minQuantity > shapesMap.get(slide).size()) {
+				if (rule.minQuantity != null && rule.minQuantity > shapesMap.get(slide).size()) {
 					violations.add(violationConstructor(List.of(rule), "На слайде слишком маленькое количество текстовых элементов", slide + 1));
 				}
-				if (rule.maxQuantity != 0 && rule.maxQuantity < shapesMap.get(slide).size()) {
+				if (rule.maxQuantity != null && rule.maxQuantity < shapesMap.get(slide).size()) {
 					violations.add(violationConstructor(List.of(rule), "На слайде слишком большое количество текстовых элементов", slide + 1));
 				}
 			}
@@ -82,24 +89,32 @@ public class TextCheck {
 			boolean flagIsAllowed = false;
 			StringBuilder description = new StringBuilder();
 			for (Rule rule : rules) {
-				List<Integer> kaggles = parseString(rule.kaggle);
-				List<String> fonts = Arrays.stream(rule.font.split(",")).map(String::trim).map(String::toLowerCase).toList();
-
-				if ((rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix)) || (rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix))) {
-					description.append("Не подходит из-за неверного префикса.\n");
-					continue;
+				if (rule.prefix != null) {
+					if ((rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix)) || (rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix))) {
+						description.append("Не подходит из-за неверного префикса.\n");
+						continue;
+					}
 				}
-				if ((rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix)) || (rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix))) {
-					description.append("Не подходит из-за неверного постфикса.\n");
-					continue;
+				if (rule.postfix != null) {
+					if ((rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix)) || (rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix))) {
+						description.append("Не подходит из-за неверного постфикса.\n");
+						continue;
+					}
 				}
-				if ((rule.invertFont && fonts.contains(textRun.getFontFamily())) || (!rule.invertFont && !fonts.contains(textRun.getFontFamily()))) {
-					description.append("Не подходит из-за неверного шрифта.\n");
-					continue;
+				if (rule.font != null) {
+					List<String> fonts = Arrays.stream(rule.font.split(",")).map(String::trim).map(String::toLowerCase).toList();
+					if ((rule.invertFont && fonts.contains(textRun.getFontFamily())) || (!rule.invertFont && !fonts.contains(textRun.getFontFamily()))) {
+						description.append("Не подходит из-за неверного шрифта.\n");
+						continue;
+					}
 				}
-				if ((rule.invertKaggle && kaggles.contains(textRun.getFontSize().intValue())) || (!rule.invertKaggle && !kaggles.contains(textRun.getFontSize().intValue()))) {
-					description.append("Не подходит из-за неверного кеггля.\n");
-					continue;
+				if (rule.kaggle != null) {
+					System.out.println("Kaggle is   " + rule.kaggle);
+					List<Integer> kaggles = parseString(rule.kaggle);
+					if ((rule.invertKaggle && kaggles.contains(textRun.getFontSize().intValue())) || (!rule.invertKaggle && !kaggles.contains(textRun.getFontSize().intValue()))) {
+						description.append("Не подходит из-за неверного кеггля.\n");
+						continue;
+					}
 				}
 				if (!rule.hyperlinks && textRun.getHyperlink() != null) {
 					description.append("Не подходит из-за неверного наличия гиперссылки.\n");
@@ -121,17 +136,41 @@ public class TextCheck {
 				for (XSLFTextShape shape : shapesMap) {
 					for (XSLFTextParagraph paragraph : shape.getTextParagraphs()) {
 						if (paragraph.getTextRuns().contains(textRun)) {
-							if (shape.getText().split(" ").length > rule.maxWords || shape.getText().split(" ").length < rule.minWords) {
-								description.append("Не подходит из-за количества слов.\n");
-								break;
+							if (rule.maxWords != null) {
+								if (shape.getText().split(" ").length > rule.maxWords) {
+									description.append("Не подходит из-за количества слов.\n");
+									break;
+								}
 							}
-							if (shape.getText().split("[.!?]]").length > rule.maxSentences || shape.getText().split("[.!?]]").length < rule.minSentences) {
-								description.append("Не подходит из-за количества предложений.\n");
-								break;
+							if (rule.minWords != null) {
+								if (shape.getText().split(" ").length < rule.minWords) {
+									description.append("Не подходит из-за количества слов.\n");
+									break;
+								}
 							}
-							if (shape.getTextParagraphs().size() > rule.maxParagraphs || shape.getTextParagraphs().size() < rule.minParagraphs) {
-								description.append("Не подходит из-за количества абзацев.\n");
-								break;
+							if (rule.maxSentences != null) {
+								if (shape.getText().split("[.!?]]").length > rule.maxSentences) {
+									description.append("Не подходит из-за количества предложений.\n");
+									break;
+								}
+							}
+							if (rule.minSentences != null) {
+								if (shape.getText().split("[.!?]]").length < rule.minSentences) {
+									description.append("Не подходит из-за количества слов.\n");
+									break;
+								}
+							}
+							if (rule.maxParagraphs != null) {
+								if (shape.getTextParagraphs().size() > rule.maxParagraphs) {
+									description.append("Не подходит из-за количества абзацев.\n");
+									break;
+								}
+							}
+							if (rule.minParagraphs != null) {
+								if (shape.getTextParagraphs().size() < rule.minParagraphs) {
+									description.append("Не подходит из-за количества абзацев.\n");
+									break;
+								}
 							}
 
 							flagIsAllowed = true;
@@ -150,27 +189,35 @@ public class TextCheck {
 	void checkObligatory(Rule rule, List<XSLFTextRun> textRuns, List<XSLFTextShape> shapesMap, Integer slideNumber, List<Violation> violations) {
 		int accepted = 0;
 
-		List<Integer> kaggles = parseString(rule.kaggle);
-		List<String> fonts = Arrays.stream(rule.font.split(",")).map(String::trim).map(String::toLowerCase).toList();
-
 		StringBuilder description = new StringBuilder();
 
 		for (XSLFTextRun textRun : textRuns) {
-			if ((rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix)) || (rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix))) {
-				description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного префикса.\n");
-				continue;
+			if (rule.prefix != null) {
+				if ((rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix)) || (rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix))) {
+					description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного префикса.\n");
+					continue;
+				}
 			}
-			if ((rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix)) || (rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix))) {
-				description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного постфикса.\n");
-				continue;
+			if (rule.postfix != null) {
+				if ((rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix)) || (rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix))) {
+					description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного постфикса.\n");
+					continue;
+				}
 			}
-			if ((rule.invertFont && fonts.contains(textRun.getFontFamily())) || (!rule.invertFont && !fonts.contains(textRun.getFontFamily()))) {
-				description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного шрифта.\n");
-				continue;
+			if (rule.font != null) {
+				List<String> fonts = Arrays.stream(rule.font.split(",")).map(String::trim).map(String::toLowerCase).toList();
+				if ((rule.invertFont && fonts.contains(textRun.getFontFamily())) || (!rule.invertFont && !fonts.contains(textRun.getFontFamily()))) {
+					description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного шрифта.\n");
+					continue;
+				}
 			}
-			if ((rule.invertKaggle && kaggles.contains(textRun.getFontSize().intValue())) || (!rule.invertKaggle && !kaggles.contains(textRun.getFontSize().intValue()))) {
-				description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного кеггля.\n");
-				continue;
+			if (rule.kaggle != null) {
+				System.out.println("Kaggle is   " + rule.kaggle);
+				List<Integer> kaggles = parseString(rule.kaggle);
+				if ((rule.invertKaggle && kaggles.contains(textRun.getFontSize().intValue())) || (!rule.invertKaggle && !kaggles.contains(textRun.getFontSize().intValue()))) {
+					description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного кеггля.\n");
+					continue;
+				}
 			}
 			if (!rule.hyperlinks && textRun.getHyperlink() != null) {
 				description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за наличия гиперссылки.\n");
@@ -194,17 +241,41 @@ public class TextCheck {
 				for (XSLFTextParagraph paragraph : shape.getTextParagraphs()) {
 					if (paragraph.getTextRuns().contains(textRun)) {
 						flagFoundRun = true;
-						if (shape.getText().split(" ").length > rule.maxWords || shape.getText().split(" ").length < rule.minWords) {
-							description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества слов.\n");
-							break;
+						if (rule.maxWords != null) {
+							if (shape.getText().split(" ").length > rule.maxWords) {
+								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества слов.\n");
+								break;
+							}
 						}
-						if (shape.getText().split("[.!?]]").length > rule.maxSentences || shape.getText().split("[.!?]]").length < rule.minSentences) {
-							description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества предложений.\n");
-							break;
+						if (rule.minWords != null) {
+							if (shape.getText().split(" ").length < rule.minWords) {
+								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества слов.\n");
+								break;
+							}
 						}
-						if (shape.getTextParagraphs().size() > rule.maxParagraphs || shape.getTextParagraphs().size() < rule.minParagraphs) {
-							description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества абзацев.\n");
-							break;
+						if (rule.maxSentences != null) {
+							if (shape.getText().split("[.!?]]").length > rule.maxSentences) {
+								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества предложений.\n");
+								break;
+							}
+						}
+						if (rule.minSentences != null) {
+							if (shape.getText().split("[.!?]]").length < rule.minSentences) {
+								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества предложений.\n");
+								break;
+							}
+						}
+						if (rule.maxParagraphs != null) {
+							if (shape.getTextParagraphs().size() > rule.maxParagraphs) {
+								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества абзацев.\n");
+								break;
+							}
+						}
+						if (rule.minParagraphs != null) {
+							if (shape.getTextParagraphs().size() < rule.minParagraphs) {
+								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества абзацев.\n");
+								break;
+							}
 						}
 						++accepted;
 						break;
@@ -234,7 +305,10 @@ public class TextCheck {
 					numberEntities.add(i);
 				}
 			} else {
-				numberEntities.add(Integer.parseInt(part));
+				try {
+					numberEntities.add(Integer.parseInt(part));
+				} catch (NumberFormatException ignored) {
+				}
 			}
 		}
 
