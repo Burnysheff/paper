@@ -348,28 +348,28 @@
       <label><input type="checkbox" id="invertSlidesI" name="invertSlidesI" th:field="*{invertSlides}">Рассматривать все слайды, кроме обозначенных</label>
 
       <label for="minQuantityI">Максимальное число картинок / видео элементов на слайде</label>
-      <input type="number" id="minQuantityI" name="minQuantity" th:field="*{minQuantity}" placeholder="10">
+      <input type="number" id="minQuantityI" name="minQuantity" th:field="*{minQuantity}" placeholder="10" min="0" oninput="validity.valid||(value='');">
 
       <label for="maxQuantityI">Минимальное число картинок / видео элементов на слайде</label>
-      <input type="number" id="maxQuantityI" name="maxQuantity" th:field="*{maxQuantity}" placeholder="1">
+      <input type="number" id="maxQuantityI" name="maxQuantity" th:field="*{maxQuantity}" placeholder="1" min="0" oninput="validity.valid||(value='');">
       <span th:if="${param.errorQuantityImage}" style="color: red;">Минимальное число элементов не может быть больше максимального</span>
       <br/>
       <div class="form-group">
         <label for="maxHeight">Максимальная высота картинки / видео</label>
-        <input type="number" id="maxHeight" name="maxHeight" th:field="*{maxHeight}" placeholder="100">
+        <input type="number" id="maxHeight" name="maxHeight" th:field="*{maxHeight}" placeholder="100" min="0" oninput="validity.valid||(value='');">
       </div>
       <div class="form-group">
         <label for="minHeight">Минимальная высота картинки / видео</label>
-        <input type="number" id="minHeight" name="minHeight" th:field="*{minHeight}" placeholder="1">
+        <input type="number" id="minHeight" name="minHeight" th:field="*{minHeight}" placeholder="1" min="0" oninput="validity.valid||(value='');">
       </div>
       <span th:if="${param.errorHeight}" style="color: red;">Минимальная высота не может быть больше максимальной</span>
       <div class="form-group">
         <label for="maxWidth">Максимальная ширина картинки / видео</label>
-        <input type="number" id="maxWidth" name="maxWidth" th:field="*{maxWidth}" placeholder="100">
+        <input type="number" id="maxWidth" name="maxWidth" th:field="*{maxWidth}" placeholder="100" min="0" oninput="validity.valid||(value='');">
       </div>
       <div class="form-group">
         <label for="minWidth">Минимальная ширина картинки / видео</label>
-        <input type="number" id="minWidth" name="minWidth" th:field="*{minWidth}" placeholder="1">
+        <input type="number" id="minWidth" name="minWidth" th:field="*{minWidth}" placeholder="1" min="0" oninput="validity.valid||(value='');">
       </div>
       <span th:if="${param.errorWidth}" style="color: red;">Минимальная ширина не может быть больше максимальной</span>
       <label class="checkbox-item"><input type="checkbox" id="hyperlinksI" name="hyperlinksI" th:field="*{hyperlinks}"> Разрешить использование гиперссылок</label>
