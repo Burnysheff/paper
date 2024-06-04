@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Форма ввода данных</title>
+  <style>
+    form label {
+      display: block;
+      margin: 15px 0 5px;
+      color: #333333;
+    }
+
+    form input[type="text"],
+    form input[type="number"],
+    form input[type="date"],
+    form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+    }
+
+    form input[type="checkbox"] {
+      margin-left: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .view-container p {
+      margin: 10px 0;
+      color: #666666;
+    }
+
+    .view-container p strong {
+      color: #333333;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+      display: flex;
+    }
+    .sidebar {
+      width: 150px;
+      background-color: #333;
+      color: #fff;
+      height: 100%;
+      padding-top: 20px;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      padding: 5px;
+      cursor: pointer;
+    }
+    .sidebar ul li:hover {
+      background-color: #555;
+    }
+    .main-content {
+      padding: 20px;
+      flex: 1;
+      background-color: #fff;
+      margin-left: 50px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group select,
+    .form-group input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .form-group input[type="submit"] {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .form-group input[type="submit"]:hover {
+      background-color: #555;
+    }
+    .content {
+      display: none;
+    }
+
+    .form-group {
+      margin: 20px;
+    }
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-item label {
+      margin-left: 8px;
+    }
+  </style>
+  <script>
+    function showContent(type) {
+      let contents = document.querySelectorAll('.content');
+      contents.forEach(content => content.style.display = 'none');
+
+      let selectedContent = document.getElementById(type);
+      if (selectedContent) {
+        selectedContent.style.display = 'block';
+      }
+    }
+
+    // Инициализация правильного контента при загрузке страницы
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const contentId = urlParams.get('type') || '1';
+      console.log(contentId)
+      showContent(contentId);
+    });
+  </script>
+</head>
+<body>
+<div class="sidebar">
+  <ul>
+    <li onclick="showContent('presentation')">Презентация</li>
+    <li onclick="showContent('code')">Текст</li>
+    <li onclick="showContent('image')">Картинки / видео</li>
+  </ul>
+</div>
+<div class="main-content">
+  <div id="presentation" class="content">
+    <h1>Презентация</h1>
+    <form th:action="@{/rules/create-rule/submit/presentation}" th:object="${ruleForm}" method="post">
+      <label>
+        Активное правило:
+        <input type="checkbox" id="activePres" name="active" th:field="*{active}">
+      </label>
+      <label>
+        Имя:
+        <input type="text" id="nameP" name="name" th:field="*{name}" required>
+      </label>
+      <label>
+        Описание:
+        <textarea name="description" id="descriptionP" th:field="*{description}" required></textarea>
+      </label>
+      <label>
+        Единый фон:
+        <input type="checkbox" id="sameBackgroundP" name="sameBackground" th:field="*{sameBackground}">
+      </label>
+      <label>
+        Минимальное количество слайдов:
+        <input type="number" id="minSlidesP" name="minSlides" th:field="*{minSlides}">
+      </label>
+      <label>
+        Максимальное количество слайдов:
+        <input type="number" id="maxSlidesP" name="maxSlides" th:field="*{maxSlides}">
+      </label>
+      <label>
+        Разрешить текст в презентации:
+        <input type="checkbox" id="allowTextP" name="allowText" th:field="*{allowText}">
+      </label>
+      <label>
+        Разрешить изображения в презентации:
+        <input type="checkbox" id="allowImagesP" name="allowImages" th:field="*{allowImages}">
+      </label>
+      <label>
+        Разрешить видео в презентации:
+        <input type="checkbox" id="allowVideoP" name="allowVideo" th:field="*{allowVideo}">
+      </label>
+      <label>
+        Разрешить диаграммы в презентации:
+        <input type="checkbox" id="allowChartsP" name="allowCharts" th:field="*{allowCharts}">
+      </label>
+      <label>
+        Разрешить таблицы в презентации:
+        <input type="checkbox" id="allowTablesP" name="allowTables" th:field="*{allowTables}">
+      </label>
+      <label>
+        Максимальное количество элементов на слайде:
+        <input type="number" id="maxSlideElementsP" name="maxSlideElements" th:field="*{maxSlideElements}">
+      </label>
+      <label>
+        Минимальные количество элементов на слайде:
+        <input type="number" id="minSlideElementsP" name="minSlideElements" th:field="*{minSlideElements}">
+      </label>
+      <div class="form-group">
+        <input type="submit" value="Создать">
+      </div>
+    </form>
+  </div>
+  <div id="code" class="content">
+        <h1>Правила для текста</h1>
+        <form th:action="@{/rules/create-rule/submit/text}" th:object="${ruleForm}" method="post">
+          <div class="form-group">
+            <label><input type="checkbox" id="obligatory" name="obligatory" th:field="*{obligatory}">Элемент обязательно должен быть на слайде</label>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="active" name="active" th:field="*{active}">Активное правило</label>
+          </div>
+          <div class="form-group">
+            <label for="name">Имя правила</label>
+            <input type="text" id="name" name="name" th:field="*{name}" required>
+          </div>
+          <div class="form-group">
+            <label for="description">Описание правила</label>
+            <input type="text" id="description" name="description" th:field="*{description}" placeholder="Правило для описания наличия заголовков...." required>
+          </div>
+          <hr>
+          <div class="form-group">
+            <label for="minQuantity">Максимальное число текстовых элементов на слайде</label>
+            <input type="number" id="minQuantity" name="minQuantity" th:field="*{minQuantity}" placeholder="10">
+          </div>
+          <div class="form-group">
+            <label for="maxQuantity">Минимальное число текстовых элементов на слайде</label>
+            <input type="number" id="maxQuantity" name="maxQuantity" th:field="*{maxQuantity}" placeholder="1">
+          </div>
+          <div class="form-group">
+            <label for="slides">Номера слайдов</label>
+            <input type="text" id="slides" name="slides" th:field="*{slides}" placeholder="1,3,5-10,16,18">
+            <span th:if="${param.errorSlides}" style="color: red;">Может содержать только цифры и символы "." и "-"</span>
+            <label><input type="checkbox" id="invertSlides" name="invertSlides" th:field="*{invertSlides}">Рассматривать все слайды, кроме обозначенных</label>
+          </div>
+          <hr>
+          <!-- Префикс строки -->
+          <div class="form-group">
+            <label for="prefix">Префикс строки</label>
+            <input type="text" id="prefix" th:field="*{prefix}" placeholder="Абзац должен начинаться с...">
+            <label class="checkbox-item"><input type="checkbox" id="prefixReverse" name="prefixReverse" th:field="*{prefixReverse}">Запретить обозначенный префикс</label>
+          </div>
+
+          <!-- Постфикс строки -->
+          <div class="form-group">
+            <label for="postfix">Постфикс строки</label>
+            <input type="text" id="postfix" th:field="*{postfix}" placeholder="Абзац должен заканчиваться на...">
+            <label class="checkbox-item"><input type="checkbox" id="postfixReverse" name="postfixReverse" th:field="*{postfixReverse}">Запретить обозначенный постфикс</label>
+          </div>
+
+          <div class="form-group">
+            <label for="fonts">Разрешенные шрифты:</label>
+            <input type="text" id="fonts" th:field="*{fonts}" placeholder="Times new Roman, HSE Sans">
+            <label class="checkbox-item"><input type="checkbox" id="fontReverse" name="fontReverse" th:field="*{fontReverse}">Запретить обозначенные шрифты</label>
+          </div>
+
+          <div class="form-group">
+            <label for="fontSizes">Размеры шрифта:</label>
+            <input type="text" id="fontSizes" name="fontSizes" th:field="*{fontSizes}" placeholder="1,3,6-10,12">
+            <span th:if="${param.errorFonts}" style="color: red;">Может содержать только цифры и символы "." и "-"</span>
+            <label class="checkbox-item"><input type="checkbox" id="sizeReverse" name="sizeReverse" th:field="*{sizeReverse}">Запретить обозначенные размеры шрифтов</label>
+          </div>
+
+          <div class="form-group checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" id="hyperlinks" name="hyperlinks" th:field="*{hyperlinks}"> Разрешить использование гиперссылок</label>
+            <label class="checkbox-item"><input type="checkbox" id="filling" name="underlined" th:field="*{underlined}"> Разрешить использование подчеркивания</label>
+            <label class="checkbox-item"><input type="checkbox" id="italic" name="italic" th:field="*{italic}"> Разрешить использование курсива</label>
+            <label class="checkbox-item"><input type="checkbox" id="bold" name="bold" th:field="*{bold}"> Разрешить использование жирного шрифта</label>
+          </div>
+
+          <div class="form-group">
+            <label for="maxWords">Максимальное число слов</label>
+            <input type="number" id="maxWords" name="maxWords" th:field="*{maxWords}" placeholder="10">
+          </div>
+          <div class="form-group">
+            <label for="maxSentences">Максимальное число предложений</label>
+            <input type="number" id="maxSentences" name="maxSentences" th:field="*{maxSentences}" placeholder="10">
+          </div>
+          <div class="form-group">
+            <label for="maxParagraphs">Максимальное число абзацев</label>
+            <input type="number" id="maxParagraphs" name="maxParagraphs" th:field="*{maxParagraphs}" placeholder="10">
+          </div>
+          <div class="form-group">
+            <label for="minWords">Минимальное число слов</label>
+            <input type="number" id="minWords" name="minWords" th:field="*{minWords}" placeholder="1">
+          </div>
+          <div class="form-group">
+            <label for="minSentences">Минимальное число предложений</label>
+            <input type="number" id="minSentences" name="minSentences" th:field="*{minSentences}" placeholder="1">
+          </div>
+          <div class="form-group">
+            <label for="minParagraphs">Минимальное число абзацев</label>
+            <input type="number" id="minParagraphs" name="minParagraphs" th:field="*{minParagraphs}" placeholder="1">
+          </div>
+
+          <div class="form-group">
+            <input type="submit" value="Создать">
+          </div>
+        </form>
+  </div>
+  <div id="image" class="content">
+    <h1>Правила для текста</h1>
+    <form th:action="@{/rules/create-rule/submit/image}" th:object="${ruleForm}" method="post">
+      <label><input type="checkbox" id="obligatoryI" name="obligatoryI" th:field="*{obligatory}">Элемент обязательно должен быть на слайде</label>
+      <label><input type="checkbox" id="activeI" name="activeI" th:field="*{active}">Активное правило</label>
+
+      <label>
+        Имя:
+        <input type="text" id="nameI" name="nameI" th:field="*{name}" required>
+      </label>
+      <label>
+        Описание:
+        <textarea name="description" id="descriptionI" th:field="*{description}" required></textarea>
+      </label>
+
+      <label for="slidesI">Номера слайдов</label>
+      <input type="text" id="slidesI" name="slidesI" th:field="*{slides}" placeholder="1,3,5-10,16,18">
+      <span th:if="${param.errorSlides}" style="color: red;">Может содержать только цифры и символы "." и "-"</span>
+      <label><input type="checkbox" id="invertSlidesI" name="invertSlidesI" th:field="*{invertSlides}">Рассматривать все слайды, кроме обозначенных</label>
+
+      <label for="minQuantityI">Максимальное число картинок / видео элементов на слайде</label>
+      <input type="number" id="minQuantityI" name="minQuantity" th:field="*{minQuantity}" placeholder="10">
+
+      <label for="maxQuantityI">Минимальное число картинок / видео элементов на слайде</label>
+      <input type="number" id="maxQuantityI" name="maxQuantity" th:field="*{maxQuantity}" placeholder="1">
+      <br/>
+      <div class="form-group">
+        <label for="maxHeight">Максимальная высота картинки / видео</label>
+        <input type="number" id="maxHeight" name="maxHeight" th:field="*{maxHeight}" placeholder="100">
+      </div>
+      <div class="form-group">
+        <label for="minHeight">Минимальная высота картинки / видео</label>
+        <input type="number" id="minHeight" name="minHeight" th:field="*{minHeight}" placeholder="1">
+      </div>
+      <div class="form-group">
+        <label for="maxWidth">Максимальная ширина картинки / видео</label>
+        <input type="number" id="maxWidth" name="maxWidth" th:field="*{maxWidth}" placeholder="100">
+      </div>
+      <div class="form-group">
+        <label for="minWidth">Минимальная ширина картинки / видео</label>
+        <input type="number" id="minWidth" name="minWidth" th:field="*{minWidth}" placeholder="1">
+      </div>
+      <label class="checkbox-item"><input type="checkbox" id="hyperlinksI" name="hyperlinksI" th:field="*{hyperlinks}"> Разрешить использование гиперссылок</label>
+      <div class="form-group">
+        <input type="submit" value="Создать">
+      </div>
+    </form>
+  </div>
+  <div class="button-container">
+    <button class="back-button" onclick="history.back()">Назад</button>
+  </div>
+</div>
+<script>
+  // Показываем "Презентацию" по умолчанию
+  showContent('presentation');
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Результаты проверки</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 80%;
+      margin: auto;
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #333;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .rules ul {
+      padding: 0;
+      list-style: none;
+    }
+
+    .rules li {
+      display: inline;
+      margin-right: 15px;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .history-table th, .history-table td {
+      text-align: center;
+    }
+
+    button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      outline: none;
+      color: #fff;
+      background-color: #3498db;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 9px #999;
+    }
+
+    button:hover {background-color: #2980b9}
+
+    button:active {
+      background-color: #2980b9;
+      box-shadow: 0 5px #666;
+      transform: translateY(4px);
+    }
+  </style>
+</head>
+<body>
+<div th:if="!${check == null}">
+  <div class="container">
+    <table class="table table-striped history-table">
+      <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Результат</th>
+        <th>Количество правил</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td th:text="${check.date}">01.01.2021</td>
+        <td th:text="${check.status}">Успешно</td>
+        <td th:text="${check.rulesNumber}">5</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:if="${check.rulesNumber != 0}">
+    <h2>Результаты проверки</h2>
+    <div th:each="violation : ${check.violationList}" th:class="Violation">
+      <div class="description" style="white-space: pre-line" th:utext="'Описание: ' + ${violation.description}"></div>
+      <div class="slideNumber" th:text="'Номер слайда: ' + ${violation.slideNumber}"></div>
+      <div class="rules">
+        <span>Нарушенные правила:</span>
+        <ul>
+          <li th:each="rule : ${violation.rules}">
+            <a th:href="@{/rules/{id}(id=${rule.id})}" th:text="${rule.name}"></a>
+          </li>
+        </ul>
+      </div>
+      <br>
+    </div>
+  </div>
+  <div th:if="${check.rulesNumber == 0}">
+    <h2>Правил не было создано!</h2>
+  </div>
+</div>
+<div th:if="${check == null}">
+  <h1 align="center"> Ни одной проверки не было! </h1>
+</div>
+<button onclick="location.href='/home'">Назад</button>
+</body>
+</html>
