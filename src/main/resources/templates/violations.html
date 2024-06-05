@@ -120,7 +120,12 @@
   </div>
   <div th:if="${check.rulesNumber != 0}">
     <div th:if="${check.violationList.size() == 0}">
-      <h2>Проверка успешно завершена, правила не нарушены!</h2>
+      <div th:if="${check.status}">
+        <h2>Проверка успешно завершена, правила не нарушены!</h2>
+      </div>
+      <div th:if="!${check.status}">
+        <h2>Правила проверки были изменены или удалены, нет возможности показать подробный результат!</h2>
+      </div>
     </div>
     <div th:if="!${check.violationList.size() == 0}">
     <h2>Результаты проверки</h2>
@@ -144,7 +149,7 @@
   </div>
 </div>
 <div th:if="${check == null}">
-  <h1 align="center"> Пока не было ни одной проверки или не было создано правил!</h1>
+  <h1 align="center">Чтобы получить результаты проверки, создайте правила, загрузите файл и выполните проверку</h1>
 </div>
 <button onclick="location.href='/home'">Назад</button>
 </body>

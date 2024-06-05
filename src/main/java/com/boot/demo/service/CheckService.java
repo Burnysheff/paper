@@ -59,6 +59,23 @@ public class CheckService {
 		return check;
 	}
 
+	public void deleteViolationRule(Rule rule) {
+		List<Violation> violations = new ArrayList<>();
+		violationRepository.findAll().forEach(violations::add);
+
+		List<Violation> vioRule = new ArrayList<>();
+		for (Violation violation : violations) {
+			if (violation.getRules().contains(rule)) {
+				vioRule.add(violation);
+			}
+		}
+
+		for (Violation violation : vioRule) {
+			violations.remove(violation);
+			violationRepository.delete(violation);
+		}
+	}
+
 	public List<Check> getUserChecks(User user) {
 		return checkRepository.getAllByUser(user);
 	}

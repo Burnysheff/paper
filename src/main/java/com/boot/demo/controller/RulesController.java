@@ -3,6 +3,7 @@ package com.boot.demo.controller;
 import com.boot.demo.dto.RuleForm;
 import com.boot.demo.model.User;
 import com.boot.demo.model.rules.Rule;
+import com.boot.demo.service.CheckService;
 import com.boot.demo.service.RuleService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,9 +16,11 @@ import java.util.List;
 @RequestMapping("/rules")
 public class RulesController {
 	RuleService ruleService;
+	CheckService checkService;
 
-	public RulesController(RuleService ruleService) {
+	public RulesController(RuleService ruleService, CheckService checkService) {
 		this.ruleService = ruleService;
+		this.checkService = checkService;
 	}
 
 	@GetMapping("")
@@ -122,7 +125,7 @@ public class RulesController {
 		Rule newRule = new Rule();
 
 		System.out.println(rule.getId());
-		RuleService.copyFields(rule, newRule);
+		RuleService.copyFieldsNoId(rule, newRule);
 
 		newRule.setOwner(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
 
@@ -194,6 +197,8 @@ public class RulesController {
 
 	@PostMapping("/{id}/delete")
 	public String deleteRule(@PathVariable Long id) {
+		checkService.deleteViolationRule(ruleService.findById(id));
+
 		ruleService.delete(id);
 		return "redirect:/rules";
 	}

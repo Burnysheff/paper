@@ -39,11 +39,10 @@ public class TextCheck {
 		for (Rule rule : rules) {
 			if (rule.attribute.equals("TEXT") && rule.active) {
 				List<Integer> slides;
-				System.out.println("Slides is   " + rule.slides);
-				if (rule.slides != null && rule.slides.trim().equals("")) {
+				if (rule.slides != null && !rule.slides.trim().equals("")) {
 					slides = parseString(rule.slides);
 				} else {
-					slides = IntStream.rangeClosed(0, presentation.getSlides().size() - 1).boxed().toList();;
+					slides = IntStream.rangeClosed(0, presentation.getSlides().size() - 1).boxed().toList();
 				}
 				for (int i = 0; i < presentation.getSlides().size(); ++i) {
 					if ((!rule.invertSlides && slides.contains(i)) || (rule.invertSlides && !slides.contains(i))) {
@@ -82,54 +81,54 @@ public class TextCheck {
 	}
 
 	void checkAllowed(List<Rule> rules, List<XSLFTextRun> textRuns, List<XSLFTextShape> shapesMap, Integer slideNumber, List<Violation> violations) {
-		if (rules.isEmpty()) {
+		if (rules == null || rules.isEmpty()) {
 			return;
 		}
 		for (XSLFTextRun textRun : textRuns) {
 			boolean flagIsAllowed = false;
 			StringBuilder description = new StringBuilder();
+
 			for (Rule rule : rules) {
 				if (rule.prefix != null) {
 					if ((rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix)) || (rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix))) {
-						description.append("Не подходит из-за неверного префикса.\n");
+						description.append("Нарушает правила из-за неверного префикса.\n");
 						continue;
 					}
 				}
 				if (rule.postfix != null) {
 					if ((rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix)) || (rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix))) {
-						description.append("Не подходит из-за неверного постфикса.\n");
+						description.append("Нарушает правила из-за неверного постфикса.\n");
 						continue;
 					}
 				}
-				if (rule.font != null) {
+				if (rule.font != null && !rule.font.trim().equals("")) {
 					List<String> fonts = Arrays.stream(rule.font.split(",")).map(String::trim).map(String::toLowerCase).toList();
 					if ((rule.invertFont && fonts.contains(textRun.getFontFamily())) || (!rule.invertFont && !fonts.contains(textRun.getFontFamily()))) {
-						description.append("Не подходит из-за неверного шрифта.\n");
+						description.append("Нарушает правила из-за неверного шрифта.\n");
 						continue;
 					}
 				}
-				if (rule.kaggle != null) {
-					System.out.println("Kaggle is   " + rule.kaggle);
+				if (rule.kaggle != null && !rule.kaggle.trim().equals("")) {
 					List<Integer> kaggles = parseString(rule.kaggle);
 					if ((rule.invertKaggle && kaggles.contains(textRun.getFontSize().intValue())) || (!rule.invertKaggle && !kaggles.contains(textRun.getFontSize().intValue()))) {
-						description.append("Не подходит из-за неверного кеггля.\n");
+						description.append("Нарушает правила из-за неверного кеггля.\n");
 						continue;
 					}
 				}
 				if (!rule.hyperlinks && textRun.getHyperlink() != null) {
-					description.append("Не подходит из-за неверного наличия гиперссылки.\n");
+					description.append("Нарушает правила из-за наличия гиперссылки.\n");
 					continue;
 				}
 				if (!rule.allowBold && textRun.isBold()) {
-					description.append("Не подходит из-за жирного шрифта.\n");
+					description.append("Нарушает правила из-за жирного шрифта.\n");
 					continue;
 				}
 				if (!rule.allowItalic && textRun.isItalic()) {
-					description.append("Не подходит из-за курсива.\n");
+					description.append("Нарушает правила из-за курсива.\n");
 					continue;
 				}
 				if (!rule.allowUnderlined && textRun.isUnderlined()) {
-					description.append("Не подходит из-за подчеркивания.\n");
+					description.append("Нарушает правила из-за подчеркивания.\n");
 					continue;
 				}
 
@@ -138,37 +137,37 @@ public class TextCheck {
 						if (paragraph.getTextRuns().contains(textRun)) {
 							if (rule.maxWords != null) {
 								if (shape.getText().split(" ").length > rule.maxWords) {
-									description.append("Не подходит из-за количества слов.\n");
+									description.append("Нарушает правила из-за количества слов.\n");
 									break;
 								}
 							}
 							if (rule.minWords != null) {
 								if (shape.getText().split(" ").length < rule.minWords) {
-									description.append("Не подходит из-за количества слов.\n");
+									description.append("Нарушает правила из-за количества слов.\n");
 									break;
 								}
 							}
 							if (rule.maxSentences != null) {
 								if (shape.getText().split("[.!?]]").length > rule.maxSentences) {
-									description.append("Не подходит из-за количества предложений.\n");
+									description.append("Нарушает правила из-за количества предложений.\n");
 									break;
 								}
 							}
 							if (rule.minSentences != null) {
 								if (shape.getText().split("[.!?]]").length < rule.minSentences) {
-									description.append("Не подходит из-за количества слов.\n");
+									description.append("Нарушает правила из-за количества слов.\n");
 									break;
 								}
 							}
 							if (rule.maxParagraphs != null) {
 								if (shape.getTextParagraphs().size() > rule.maxParagraphs) {
-									description.append("Не подходит из-за количества абзацев.\n");
+									description.append("Нарушает правила из-за количества абзацев.\n");
 									break;
 								}
 							}
 							if (rule.minParagraphs != null) {
 								if (shape.getTextParagraphs().size() < rule.minParagraphs) {
-									description.append("Не подходит из-за количества абзацев.\n");
+									description.append("Нарушает правила из-за количества абзацев.\n");
 									break;
 								}
 							}
@@ -181,7 +180,7 @@ public class TextCheck {
 			}
 
 			if (!flagIsAllowed) {
-				violations.add(violationConstructor(rules, "Элемент: \"" + textRun.getRawText() + "\" не подходит из-за:\n" + description, slideNumber + 1));
+				violations.add(violationConstructor(rules, "Элемент: \"" + textRun.getRawText() + "\"\n" + description, slideNumber + 1));
 			}
 		}
 	}
@@ -192,47 +191,47 @@ public class TextCheck {
 		StringBuilder description = new StringBuilder();
 
 		for (XSLFTextRun textRun : textRuns) {
+			String errorText = textRun.getRawText().length() > 25 ? textRun.getRawText().substring(0, 23) : textRun.getRawText();
 			if (rule.prefix != null) {
 				if ((rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix)) || (rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix))) {
-					description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного префикса.\n");
+					description.append("Элемент: \"" + errorText + "\" не подходит из-за неверного префикса.\n");
 					continue;
 				}
 			}
 			if (rule.postfix != null) {
 				if ((rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix)) || (rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix))) {
-					description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного постфикса.\n");
+					description.append("Элемент: \"" + errorText + "\" не подходит из-за неверного постфикса.\n");
 					continue;
 				}
 			}
-			if (rule.font != null) {
+			if (rule.font != null && !rule.font.trim().equals("")) {
 				List<String> fonts = Arrays.stream(rule.font.split(",")).map(String::trim).map(String::toLowerCase).toList();
 				if ((rule.invertFont && fonts.contains(textRun.getFontFamily())) || (!rule.invertFont && !fonts.contains(textRun.getFontFamily()))) {
-					description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного шрифта.\n");
+					description.append("Элемент: \"" + errorText + "\" не подходит из-за неверного шрифта.\n");
 					continue;
 				}
 			}
-			if (rule.kaggle != null) {
-				System.out.println("Kaggle is   " + rule.kaggle);
+			if (rule.kaggle != null && !rule.kaggle.trim().equals("")) {
 				List<Integer> kaggles = parseString(rule.kaggle);
 				if ((rule.invertKaggle && kaggles.contains(textRun.getFontSize().intValue())) || (!rule.invertKaggle && !kaggles.contains(textRun.getFontSize().intValue()))) {
-					description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за неверного кеггля.\n");
+					description.append("Элемент: \"" + errorText + "\" не подходит из-за неверного кеггля.\n");
 					continue;
 				}
 			}
 			if (!rule.hyperlinks && textRun.getHyperlink() != null) {
-				description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за наличия гиперссылки.\n");
+				description.append("Элемент: \"").append(errorText).append("\" не подходит из-за наличия гиперссылки.\n");
 				continue;
 			}
 			if (!rule.allowBold && textRun.isBold()) {
-				description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за жирного шрифта.\n");
+				description.append("Элемент: \"" + errorText + "\" не подходит из-за жирного шрифта.\n");
 				continue;
 			}
 			if (!rule.allowItalic && textRun.isItalic()) {
-				description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за курсива.\n");
+				description.append("Элемент: \"" + errorText + "\" не подходит из-за курсива.\n");
 				continue;
 			}
 			if (!rule.allowUnderlined && textRun.isUnderlined()) {
-				description.append("Элемент: \"" + textRun.getRawText() + "\" не подходит из-за подчеркивания.\n");
+				description.append("Элемент: \"" + errorText + "\" не подходит из-за подчеркивания.\n");
 				continue;
 			}
 

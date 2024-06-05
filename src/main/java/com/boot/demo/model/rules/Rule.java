@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Table;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -128,5 +129,61 @@ public class Rule {
 		this.description = desc;
 		this.author = author;
 		this.active = active;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Rule rule = (Rule) o;
+
+		boolean a = obligatory == rule.obligatory &&
+				active == rule.active &&
+				sameBackground == rule.sameBackground &&
+				allowText == rule.allowText &&
+				allowImages == rule.allowImages &&
+				allowVideo == rule.allowVideo &&
+				allowCharts == rule.allowCharts &&
+				allowTables == rule.allowTables &&
+				invertSlides == rule.invertSlides &&
+				invertPrefix == rule.invertPrefix &&
+				invertPostfix == rule.invertPostfix &&
+				invertKaggle == rule.invertKaggle &&
+				invertFont == rule.invertFont &&
+				hyperlinks == rule.hyperlinks &&
+				allowBold == rule.allowBold &&
+				allowItalic == rule.allowItalic &&
+				allowUnderlined == rule.allowUnderlined;
+		boolean b = Objects.equals(attribute, rule.attribute) &&
+				Objects.equals(name, rule.name) &&
+				Objects.equals(description, rule.description) &&
+				Objects.equals(minSlides, rule.minSlides) &&
+				Objects.equals(maxSlides, rule.maxSlides) &&
+				Objects.equals(maxSlideElements, rule.maxSlideElements) &&
+				Objects.equals(minSlideElements, rule.minSlideElements) &&
+				Objects.equals(slides, rule.slides) &&
+				Objects.equals(minQuantity, rule.minQuantity) &&
+				Objects.equals(maxQuantity, rule.maxQuantity) &&
+				Objects.equals(prefix, rule.prefix) &&
+				Objects.equals(postfix, rule.postfix) &&
+				Objects.equals(font, rule.font) &&
+				Objects.equals(kaggle, rule.kaggle) &&
+				Objects.equals(maxWords, rule.maxWords) &&
+				Objects.equals(maxSentences, rule.maxSentences) &&
+				Objects.equals(maxParagraphs, rule.maxParagraphs) &&
+				Objects.equals(minWords, rule.minWords) &&
+				Objects.equals(minSentences, rule.minSentences) &&
+				Objects.equals(minParagraphs, rule.minParagraphs) &&
+				Objects.equals(minHeight, rule.minHeight) &&
+				Objects.equals(minWidth, rule.minWidth) &&
+				Objects.equals(maxHeight, rule.maxHeight) &&
+				Objects.equals(maxWidth, rule.maxWidth);
+
+		return a && b;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(attribute, obligatory, active, author, owner, description, sameBackground, minSlides, maxSlides, allowText, allowImages, allowVideo, allowCharts, allowTables, maxSlideElements, minSlideElements, slides, invertSlides, minQuantity, maxQuantity, prefix, postfix, font, kaggle, invertPrefix, invertPostfix, invertKaggle, invertFont, hyperlinks, maxWords, maxSentences, maxParagraphs, minWords, minSentences, minParagraphs, allowBold, allowItalic, allowUnderlined, minHeight, minWidth, maxHeight, maxWidth);
 	}
 }

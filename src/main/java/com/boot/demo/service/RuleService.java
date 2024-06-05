@@ -60,8 +60,8 @@ public class RuleService {
 		rule.setAllowVideo(ruleForm.allowVideo);
 		rule.setAllowCharts(ruleForm.allowCharts);
 		rule.setAllowTables(ruleForm.allowTables);
-		rule.setMinSlideElements(ruleForm.maxSlideElements);
-		rule.setMaxSlideElements(ruleForm.minSlideElements);
+		rule.setMinSlideElements(ruleForm.minSlideElements);
+		rule.setMaxSlideElements(ruleForm.maxSlideElements);
 
 		rule.setMinHeight(ruleForm.minHeight);
 		rule.setMaxHeight(ruleForm.maxHeight);
@@ -80,14 +80,25 @@ public class RuleService {
 		return ruleRepository.findAllByOwner(((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
 	}
 	public List<Rule> getRulesNotUser() {
-		List<Rule> rules = this.getRules();
-		List<Rule> owners = ruleRepository.findAllByOwner(((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().toString());
+		List<Rule> user = getRulesUser();
+		List<Rule> all = getRules();
 
-		for (Rule rule : owners) {
-			rules.remove(rule);
+		List<Rule> equals = new ArrayList<>();
+
+		for (Rule value : all) {
+			for (Rule rule : user) {
+				if (rule.equals(value)) {
+					equals.add(value);
+					break;
+				}
+			}
 		}
 
-		return rules;
+		for (Rule equal : equals) {
+			all.remove(equal);
+		}
+
+		return all;
 	}
 
 
@@ -210,6 +221,21 @@ public class RuleService {
 	public static void copyFields(Rule source, Rule target) {
 		Field[] fields = Rule.class.getDeclaredFields();
 		for (Field field : fields) {
+			try {
+				field.setAccessible(true);
+				field.set(target, field.get(source));
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void copyFieldsNoId(Rule source, Rule target) {
+		Field[] fields = Rule.class.getDeclaredFields();
+		for (Field field : fields) {
+			if (field.getName().equals("Id")) {
+				continue;
+			}
 			try {
 				field.setAccessible(true);
 				field.set(target, field.get(source));
