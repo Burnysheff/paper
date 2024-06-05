@@ -153,5 +153,8 @@
   Пожалуйста, проверьте, что Ваши правила активны!</h1>
 </div>
 <button onclick="location.href='/home'">Назад</button>
+<form th:action="@{${check.id} + '/download-pdf'}" method="post" style="display: inline;">
+  <button type="submit" class="btn delete">Скачать отчет</button>
+</form>
 </body>
 </html>

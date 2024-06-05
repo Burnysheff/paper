@@ -56,14 +56,15 @@ public class HomeController {
 		return "violations";
 	}
 
-	@PostMapping("/upload") public String uploadFile(@RequestParam("file") MultipartFile file, Model model) throws IOException {
+	@PostMapping("/upload")
+	public String uploadFile(@RequestParam("file") MultipartFile file, Model model) throws IOException {
 		if (!file.getContentType().endsWith("openxmlformats-officedocument.presentationml.presentation")) {
 			return "redirect:/home?error=true";
 		}
 
 		ZipSecureFile.setMinInflateRatio(0);
 
-		File convFile = new File( "/data/" + file.getName());
+		File convFile = new File( "/Users/nick/data/" + file.getName());
 		file.transferTo(convFile);
 
 		List<Rule> rules = ruleService.getRulesForUser();
