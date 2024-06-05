@@ -301,12 +301,12 @@ public class TextCheck {
 			if (part.contains("-")) {
 				smallers = part.split("-");
 				for (int i = Integer.parseInt(smallers[0].trim()); i <= Integer.parseInt(smallers[1].trim()); ++i) {
-					numberEntities.add(i);
+					numberEntities.add(i - 1);
 				}
 			} else {
 				try {
-					numberEntities.add(Integer.parseInt(part.trim()));
-				} catch (NumberFormatException ignored) {
+					numberEntities.add(Integer.parseInt(part.trim()) - 1);
+				} catch (RuntimeException ignored) {
 				}
 			}
 		}

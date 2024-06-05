@@ -160,7 +160,7 @@ public class RuleService {
 			rule.setKaggle(original.getKaggle());
 		}
 
-// Integer поля
+		// Integer поля
 		if (rule.getMinSlides() == null && original.getMinSlides() != null) {
 			rule.setMinSlides(original.getMinSlides());
 		}
@@ -245,4 +245,37 @@ public class RuleService {
 		}
 	}
 
+	List<Integer> parseString(String slidesString) {
+		if (slidesString == null) {
+			return null;
+		}
+
+		List<Integer> numberEntities = new ArrayList<>();
+
+		while (slidesString.contains(",,") || slidesString.contains("--") || slidesString.contains(",-") || slidesString.contains("-,")) {
+			slidesString = slidesString.replace(",,", ",");
+			slidesString = slidesString.replace("--", "-");
+			slidesString = slidesString.replace(",-", ",");
+			slidesString = slidesString.replace("-,", ",");
+		}
+
+		String[] parts = slidesString.split(",");
+
+		for (String part : parts) {
+			String[] smallers;
+			if (part.contains("-")) {
+				smallers = part.split("-");
+				for (int i = Integer.parseInt(smallers[0].trim()); i <= Integer.parseInt(smallers[1].trim()); ++i) {
+					numberEntities.add(i - 1);
+				}
+			} else {
+				try {
+					numberEntities.add(Integer.parseInt(part.trim()) - 1);
+				} catch (RuntimeException ignored) {
+				}
+			}
+		}
+
+		return numberEntities;
+	}
 }
