@@ -236,15 +236,6 @@
             <label><input type="checkbox" id="active" name="active" th:field="*{active}">Правило активно (должно использоваться в проверке):</label>
           </div>
           <div class="form-group">
-            <label for="name">Имя правила</label>
-            <input type="text" id="name" name="name" th:field="*{name}" maxlength="15" required>
-          </div>
-          <div class="form-group">
-            <label for="description">Описание правила</label>
-            <input type="text" id="description" name="description" th:field="*{description}" maxlength="100" placeholder="Правило для описания наличия заголовков...." required>
-          </div>
-          <hr>
-          <div class="form-group">
             <label for="minQuantity">Минимальное число текстовых элементов на слайде</label>
             <input type="number" id="minQuantity" name="minQuantity" th:field="*{minQuantity}" placeholder="10" min="0" max="100" oninput="validity.valid||(value='');">
           </div>
@@ -253,6 +244,16 @@
             <input type="number" id="maxQuantity" name="maxQuantity" th:field="*{maxQuantity}" placeholder="1" min="0" max="100" oninput="validity.valid||(value='');">
           </div>
           <span th:if="${param.errorQuantity}" style="color: red;">Минимальное число элементов не может быть больше максимального</span>
+          <p>Максимальное и максимальное число ВСЕХ текстовых полей на одном слайде</p>
+          <div class="form-group">
+            <label for="name">Имя правила</label>
+            <input type="text" id="name" name="name" th:field="*{name}" maxlength="15" required>
+          </div>
+          <div class="form-group">
+            <label for="description">Описание правила</label>
+            <input type="text" id="description" name="description" th:field="*{description}" maxlength="100" placeholder="Правило для описания наличия заголовков...." required>
+          </div>
+          <hr>
           <div class="form-group">
             <label for="slides">Номера слайдов, рассматриваемых в правиле:</label>
             <input type="text" id="slides" name="slides" th:field="*{slides}" placeholder="1,3,5-10,16,18" maxlength="20">
@@ -363,6 +364,7 @@
       <label for="maxQuantityI">Максимальное число картинок / видео элементов на слайде</label>
       <input type="number" id="maxQuantityI" name="maxQuantity" th:field="*{maxQuantity}" placeholder="1" min="0" max="100" oninput="validity.valid||(value='');">
       <span th:if="${param.errorQuantityImage}" style="color: red;">Минимальное число элементов не может быть больше максимального</span>
+      <p>Минимальное и максимальное число ВСЕХ картинок / видео элементов на одном слайде</p>
       <br/>
       <div class="form-group">
         <label for="maxHeight">Максимальная высота картинки / видео</label>
