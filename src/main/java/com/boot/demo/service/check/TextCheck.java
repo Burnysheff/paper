@@ -71,7 +71,7 @@ public class TextCheck {
 			}
 			for (Rule rule : ruleMap.get(slide)) {
 				if (rule.obligatory) {
-					checkObligatory(rule, textRunMap.get(slide), shapesMap.get(slide), slide, violations);
+					checkObligatory(rule, shapesMap.get(slide), slide, violations);
 				} else {
 					allowed.add(rule);
 				}
@@ -84,23 +84,76 @@ public class TextCheck {
 		if (rules == null || rules.isEmpty()) {
 			return;
 		}
-		for (XSLFTextRun textRun : textRuns) {
+
+		for (XSLFTextShape shape : shapesMap) {
 			boolean flagIsAllowed = false;
 			StringBuilder description = new StringBuilder();
 
 			for (Rule rule : rules) {
 				if (rule.prefix != null) {
-					if ((rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix)) || (rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix))) {
+					if ((!rule.invertPrefix && !shape.getText().startsWith(rule.prefix)) || (rule.invertPrefix && shape.getText().startsWith(rule.prefix))) {
 						description.append("Нарушает правила из-за неверного префикса.\n");
 						continue;
 					}
 				}
 				if (rule.postfix != null) {
-					if ((rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix)) || (rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix))) {
+					if ((!rule.invertPostfix && !shape.getText().startsWith(rule.postfix)) || (rule.invertPostfix && shape.getText().startsWith(rule.postfix))) {
 						description.append("Нарушает правила из-за неверного постфикса.\n");
 						continue;
 					}
 				}
+				if (rule.maxWords != null) {
+					if (shape.getText().split(" ").length > rule.maxWords) {
+						description.append("Нарушает правила из-за количества слов.\n");
+						break;
+					}
+				}
+				if (rule.minWords != null) {
+					if (shape.getText().split(" ").length < rule.minWords) {
+						description.append("Нарушает правила из-за количества слов.\n");
+						break;
+					}
+				}
+				if (rule.maxSentences != null) {
+					if (shape.getText().split("[.!?]]").length > rule.maxSentences) {
+						description.append("Нарушает правила из-за количества предложений.\n");
+						break;
+					}
+				}
+				if (rule.minSentences != null) {
+					if (shape.getText().split("[.!?]]").length < rule.minSentences) {
+						description.append("Нарушает правила из-за количества слов.\n");
+						break;
+					}
+				}
+				if (rule.maxParagraphs != null) {
+					if (shape.getTextParagraphs().size() > rule.maxParagraphs) {
+						description.append("Нарушает правила из-за количества абзацев.\n");
+						break;
+					}
+				}
+				if (rule.minParagraphs != null) {
+					if (shape.getTextParagraphs().size() < rule.minParagraphs) {
+						description.append("Нарушает правила из-за количества абзацев.\n");
+						break;
+					}
+				}
+				flagIsAllowed = true;
+			}
+
+			if (!flagIsAllowed) {
+				String errorText = shape.getText().length() > 25 ? shape.getText().substring(0, 23) + "..." : shape.getText();
+
+				violations.add(violationConstructor(rules, "Элемент: \"" + errorText + "\"\n" + description, slideNumber));
+				return;
+			}
+		}
+
+		for (XSLFTextRun textRun : textRuns) {
+			boolean flagIsAllowed = false;
+			StringBuilder description = new StringBuilder();
+
+			for (Rule rule : rules) {
 				if (rule.font != null && !rule.font.trim().equals("")) {
 					List<String> fonts = Arrays.stream(rule.font.split(",")).map(String::trim).map(String::toLowerCase).toList();
 					if ((rule.invertFont && fonts.contains(textRun.getFontFamily())) || (!rule.invertFont && !fonts.contains(textRun.getFontFamily()))) {
@@ -132,164 +185,143 @@ public class TextCheck {
 					continue;
 				}
 
-				for (XSLFTextShape shape : shapesMap) {
-					for (XSLFTextParagraph paragraph : shape.getTextParagraphs()) {
-						if (paragraph.getTextRuns().contains(textRun)) {
-							if (rule.maxWords != null) {
-								if (shape.getText().split(" ").length > rule.maxWords) {
-									description.append("Нарушает правила из-за количества слов.\n");
-									break;
-								}
-							}
-							if (rule.minWords != null) {
-								if (shape.getText().split(" ").length < rule.minWords) {
-									description.append("Нарушает правила из-за количества слов.\n");
-									break;
-								}
-							}
-							if (rule.maxSentences != null) {
-								if (shape.getText().split("[.!?]]").length > rule.maxSentences) {
-									description.append("Нарушает правила из-за количества предложений.\n");
-									break;
-								}
-							}
-							if (rule.minSentences != null) {
-								if (shape.getText().split("[.!?]]").length < rule.minSentences) {
-									description.append("Нарушает правила из-за количества слов.\n");
-									break;
-								}
-							}
-							if (rule.maxParagraphs != null) {
-								if (shape.getTextParagraphs().size() > rule.maxParagraphs) {
-									description.append("Нарушает правила из-за количества абзацев.\n");
-									break;
-								}
-							}
-							if (rule.minParagraphs != null) {
-								if (shape.getTextParagraphs().size() < rule.minParagraphs) {
-									description.append("Нарушает правила из-за количества абзацев.\n");
-									break;
-								}
-							}
-
-							flagIsAllowed = true;
-							break;
-						}
-					}
-				}
+				flagIsAllowed = true;
+				break;
 			}
 
 			if (!flagIsAllowed) {
-				violations.add(violationConstructor(rules, "Элемент: \"" + textRun.getRawText() + "\"\n" + description, slideNumber + 1));
+				violations.add(violationConstructor(rules, "Элемент: \"" + textRun.getRawText() + "\"\n" + description, slideNumber));
 			}
 		}
 	}
 
-	void checkObligatory(Rule rule, List<XSLFTextRun> textRuns, List<XSLFTextShape> shapesMap, Integer slideNumber, List<Violation> violations) {
-		int accepted = 0;
-
+	void checkObligatory(Rule rule, List<XSLFTextShape> shapesMap, Integer slideNumber, List<Violation> violations) {
 		StringBuilder description = new StringBuilder();
 
-		for (XSLFTextRun textRun : textRuns) {
-			String errorText = textRun.getRawText().length() > 25 ? textRun.getRawText().substring(0, 23) : textRun.getRawText();
+		boolean accepted = false;
+		boolean runAccepted = true;
+
+		for (XSLFTextShape shape : shapesMap) {
+			if (accepted && runAccepted) {
+				break;
+			}
+
+			accepted = false;
+
+			String errorText = shape.getText().length() > 25 ? shape.getText().substring(0, 23) + "..." : shape.getText();
 			if (rule.prefix != null) {
-				if ((rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix)) || (rule.invertPrefix && textRun.getRawText().startsWith(rule.prefix))) {
+				if ((!rule.invertPrefix && !shape.getText().startsWith(rule.prefix)) || (rule.invertPrefix && shape.getText().startsWith(rule.prefix))) {
 					description.append("Элемент: \"" + errorText + "\" не подходит из-за неверного префикса.\n");
 					continue;
 				}
 			}
 			if (rule.postfix != null) {
-				if ((rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix)) || (rule.invertPostfix && textRun.getRawText().startsWith(rule.postfix))) {
-					description.append("Элемент: \"" + errorText + "\" не подходит из-за неверного постфикса.\n");
+				if ((!rule.invertPostfix && !shape.getText().startsWith(rule.postfix)) || (rule.invertPostfix && shape.getText().startsWith(rule.postfix))) {
+					description.append("Нарушает правила из-за неверного постфикса.\n");
 					continue;
 				}
-			}
-			if (rule.font != null && !rule.font.trim().equals("")) {
-				List<String> fonts = Arrays.stream(rule.font.split(",")).map(String::trim).map(String::toLowerCase).toList();
-				if ((rule.invertFont && fonts.contains(textRun.getFontFamily())) || (!rule.invertFont && !fonts.contains(textRun.getFontFamily()))) {
-					description.append("Элемент: \"" + errorText + "\" не подходит из-за неверного шрифта.\n");
-					continue;
-				}
-			}
-			if (rule.kaggle != null && !rule.kaggle.trim().equals("")) {
-				List<Integer> kaggles = parseString(rule.kaggle);
-				if ((rule.invertKaggle && kaggles.contains(textRun.getFontSize().intValue())) || (!rule.invertKaggle && !kaggles.contains(textRun.getFontSize().intValue()))) {
-					description.append("Элемент: \"" + errorText + "\" не подходит из-за неверного кеггля.\n");
-					continue;
-				}
-			}
-			if (!rule.hyperlinks && textRun.getHyperlink() != null) {
-				description.append("Элемент: \"").append(errorText).append("\" не подходит из-за наличия гиперссылки.\n");
-				continue;
-			}
-			if (!rule.allowBold && textRun.isBold()) {
-				description.append("Элемент: \"" + errorText + "\" не подходит из-за жирного шрифта.\n");
-				continue;
-			}
-			if (!rule.allowItalic && textRun.isItalic()) {
-				description.append("Элемент: \"" + errorText + "\" не подходит из-за курсива.\n");
-				continue;
-			}
-			if (!rule.allowUnderlined && textRun.isUnderlined()) {
-				description.append("Элемент: \"" + errorText + "\" не подходит из-за подчеркивания.\n");
-				continue;
 			}
 
-			boolean flagFoundRun = false;
-			for (XSLFTextShape shape : shapesMap) {
-				for (XSLFTextParagraph paragraph : shape.getTextParagraphs()) {
-					if (paragraph.getTextRuns().contains(textRun)) {
-						flagFoundRun = true;
-						if (rule.maxWords != null) {
-							if (shape.getText().split(" ").length > rule.maxWords) {
-								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества слов.\n");
-								break;
-							}
-						}
-						if (rule.minWords != null) {
-							if (shape.getText().split(" ").length < rule.minWords) {
-								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества слов.\n");
-								break;
-							}
-						}
-						if (rule.maxSentences != null) {
-							if (shape.getText().split("[.!?]]").length > rule.maxSentences) {
-								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества предложений.\n");
-								break;
-							}
-						}
-						if (rule.minSentences != null) {
-							if (shape.getText().split("[.!?]]").length < rule.minSentences) {
-								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества предложений.\n");
-								break;
-							}
-						}
-						if (rule.maxParagraphs != null) {
-							if (shape.getTextParagraphs().size() > rule.maxParagraphs) {
-								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества абзацев.\n");
-								break;
-							}
-						}
-						if (rule.minParagraphs != null) {
-							if (shape.getTextParagraphs().size() < rule.minParagraphs) {
-								description.append("Элемент: \"" + shape.getText() + "\" не подходит из-за количества абзацев.\n");
-								break;
-							}
-						}
-						++accepted;
-						break;
-					}
-				}
-				if (flagFoundRun) {
+			if (rule.maxWords != null) {
+				if (shape.getText().split(" ").length > rule.maxWords) {
+					description.append("Нарушает правила из-за количества слов.\n");
 					break;
 				}
 			}
+			if (rule.minWords != null) {
+				if (shape.getText().split(" ").length < rule.minWords) {
+					description.append("Нарушает правила из-за количества слов.\n");
+					break;
+				}
+			}
+			if (rule.maxSentences != null) {
+				if (shape.getText().split("[.!?]]").length > rule.maxSentences) {
+					description.append("Нарушает правила из-за количества предложений.\n");
+					break;
+				}
+			}
+			if (rule.minSentences != null) {
+				if (shape.getText().split("[.!?]]").length < rule.minSentences) {
+					description.append("Нарушает правила из-за количества предложений.\n");
+					break;
+				}
+			}
+			if (rule.maxParagraphs != null) {
+				if (shape.getTextParagraphs().size() > rule.maxParagraphs) {
+					description.append("Нарушает правила из-за количества абзацев.\n");
+					break;
+				}
+			}
+			if (rule.minParagraphs != null) {
+				if (shape.getTextParagraphs().size() < rule.minParagraphs) {
+					description.append("Нарушает правила из-за количества абзацев.\n");
+					break;
+				}
+			}
+
+			accepted = true;
+			runAccepted = true;
+
+			description = new StringBuilder();
+
+			for (XSLFTextParagraph paragraph : shape.getTextParagraphs()) {
+				if (!runAccepted) {
+					break;
+				}
+				for (XSLFTextRun textRun : paragraph.getTextRuns()) {
+					String errorTextRun = textRun.getRawText().length() > 25 ? textRun.getRawText().substring(0, 23) + "..." : textRun.getRawText();
+					if (rule.font != null && !rule.font.trim().equals("")) {
+						List<String> fonts = Arrays.stream(rule.font.split(",")).map(String::trim).map(String::toLowerCase).toList();
+						if ((rule.invertFont && fonts.contains(textRun.getFontFamily().toLowerCase())) || (!rule.invertFont && !fonts.contains(textRun.getFontFamily().toLowerCase()))) {
+							description.append("Элемент: \"" + errorTextRun + "\" не подходит из-за неверного шрифта.\n");
+							runAccepted = false;
+							break;
+						}
+					}
+
+					if (rule.kaggle != null && !rule.kaggle.trim().equals("")) {
+						List<Integer> kaggles = parseString(rule.kaggle);
+						try {
+							if ((rule.invertKaggle && kaggles.contains(textRun.getFontSize().intValue())) || (!rule.invertKaggle && !kaggles.contains(textRun.getFontSize().intValue()))) {
+								description.append("Элемент: \"" + errorTextRun + "\" не подходит из-за неверного кеггля.\n");
+								runAccepted = false;
+								break;
+							}
+						} catch (RuntimeException ignored) {}
+					}
+					if (!rule.hyperlinks && textRun.getHyperlink() != null) {
+						description.append("Элемент: \"").append(errorTextRun).append("\" не подходит из-за наличия гиперссылки.\n");
+						runAccepted = false;
+						break;
+					}
+					if (!rule.allowBold && textRun.isBold()) {
+						description.append("Элемент: \"" + errorTextRun + "\" не подходит из-за жирного шрифта.\n");
+						runAccepted = false;
+						break;
+					}
+					if (!rule.allowItalic && textRun.isItalic()) {
+						description.append("Элемент: \"" + errorTextRun + "\" не подходит из-за курсива.\n");
+						runAccepted = false;
+						break;
+					}
+					if (!rule.allowUnderlined && textRun.isUnderlined()) {
+						description.append("Элемент: \"" + errorTextRun + "\" не подходит из-за подчеркивания.\n");
+						runAccepted = false;
+						break;
+					}
+				}
+			}
 		}
 
-		if (accepted == 0) {
-			violations.add(violationConstructor(List.of(rule), "Нет обязательного текстового элемента на слайде!\n" + description, slideNumber + 1));
+		if (accepted && !runAccepted) {
+			violations.add(violationConstructor(List.of(rule), "Внутри подходящей обязательной формы текста обнаружен неподходящий стиль: \n" + description, slideNumber));
+		}
+		if (!accepted) {
+			violations.add(violationConstructor(List.of(rule), "Нет подходящей обязательной формы: \n" + description, slideNumber));
 		}
 	}
+
+
 
 	List<Integer> parseString(String slidesString) {
 		List<Integer> numberEntities = new ArrayList<>();
@@ -319,7 +351,7 @@ public class TextCheck {
 
 		violation.setRules(rules);
 		violation.setDescription(description);
-		violation.setSlideNumber(slideNumber);
+		violation.setSlideNumber(slideNumber + 1);
 
 		return violation;
 	}
