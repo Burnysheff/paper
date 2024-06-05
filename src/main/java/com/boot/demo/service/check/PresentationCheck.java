@@ -80,9 +80,8 @@ public class PresentationCheck {
 				} else if (shape instanceof XSLFGraphicFrame) {
 					if (shape instanceof XSLFTable) {
 						tables++;
-					}
-					if (shape instanceof XSLFDiagram) {
-						charts++;
+					} else {
+						++charts;
 					}
 				}
 			}
