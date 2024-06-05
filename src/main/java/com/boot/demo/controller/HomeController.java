@@ -63,7 +63,7 @@ public class HomeController {
 
 		ZipSecureFile.setMinInflateRatio(0);
 
-		File convFile = new File( "/Users/nick/data/" + file.getName());
+		File convFile = new File( "/data/" + file.getName());
 		file.transferTo(convFile);
 
 		List<Rule> rules = ruleService.getRulesForUser();
