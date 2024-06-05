@@ -300,12 +300,12 @@ public class TextCheck {
 			String[] smallers;
 			if (part.contains("-")) {
 				smallers = part.split("-");
-				for (int i = Integer.parseInt(smallers[0]); i <= Integer.parseInt(smallers[1]); ++i) {
+				for (int i = Integer.parseInt(smallers[0].trim()); i <= Integer.parseInt(smallers[1].trim()); ++i) {
 					numberEntities.add(i);
 				}
 			} else {
 				try {
-					numberEntities.add(Integer.parseInt(part));
+					numberEntities.add(Integer.parseInt(part.trim()));
 				} catch (NumberFormatException ignored) {
 				}
 			}

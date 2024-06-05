@@ -28,7 +28,6 @@
   <div class="profile-info">
     <h4>Информация о пользователе</h4>
     <p><strong>Логин:</strong> <span th:text="${user.name}">Иван Иванов</span></p>
-    <p><strong>Пароль:</strong>•••••••</p>
   </div>
 
   <div th:if="${!#lists.isEmpty(checks)}">
@@ -55,7 +54,7 @@
   <div th:if="${#lists.isEmpty(checks)}">
     <h4>Здесь будет Ваша история проверок</h4>
   </div>
-  <button onclick="history.back()">Назад</button>
+  <button onclick="location.href='/home'">Назад</button>
 </div>
 </body>
 </html>

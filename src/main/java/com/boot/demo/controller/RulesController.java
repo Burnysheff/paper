@@ -63,10 +63,10 @@ public class RulesController {
 
 	@PostMapping("/create-rule/submit/text")
 	public String submit(@ModelAttribute RuleForm ruleForm) {
-		if (!ruleForm.fontSizes.matches("[1234567890,-]+") && !ruleForm.fontSizes.isEmpty()) {
+		if (!ruleForm.fontSizes.matches("[\s1234567890,-]+") && !ruleForm.fontSizes.isEmpty()) {
 			return "redirect:/rules/create-rule/text?type=code&errorFonts=true";
 		}
-		if (ruleForm.slides != null && !ruleForm.slides.matches("[1234567890,-]+") && !ruleForm.slides.isEmpty()) {
+		if (ruleForm.slides != null && !ruleForm.slides.matches("[\s1234567890,-]+") && !ruleForm.slides.isEmpty()) {
 			return "redirect:/rules/create-rule/text?type=code&errorSlides=true";
 		}
 		if (ruleForm.minQuantity != null && ruleForm.maxQuantity != null && ruleForm.minQuantity > ruleForm.maxQuantity) {
@@ -88,7 +88,7 @@ public class RulesController {
 
 	@PostMapping("/create-rule/submit/image")
 	public String submitImage(@ModelAttribute RuleForm ruleForm) {
-		if (ruleForm.slides != null && !ruleForm.slides.matches("[1234567890,-]+") && !ruleForm.slides.isEmpty()) {
+		if (ruleForm.slides != null && !ruleForm.slides.matches("[\s1234567890,-]+") && !ruleForm.slides.isEmpty()) {
 			return "redirect:/rules/create-rule/text?type=image&errorSlides=true";
 		}
 		if (ruleForm.minQuantity != null && ruleForm.maxQuantity != null && ruleForm.minQuantity > ruleForm.maxQuantity) {
@@ -163,7 +163,7 @@ public class RulesController {
 		if (rule.minSlideElements != null && rule.maxSlideElements != null && rule.minSlideElements > rule.maxSlideElements) {
 			return "redirect:/rules/" + id + "/edit?slideElements=true";
 		}
-		if (rule.kaggle != null && !rule.kaggle.matches("[1234567890,-]+") && !rule.kaggle.isEmpty()) {
+		if (rule.kaggle != null && !rule.kaggle.matches("[\s1234567890,-]+") && !rule.kaggle.isEmpty()) {
 			return "redirect:/rules/" + id + "/kaggle=true";
 		}
 		if (rule.maxWords != null && rule.minWords != null && rule.minWords > rule.maxWords) {
@@ -175,7 +175,7 @@ public class RulesController {
 		if (rule.maxParagraphs != null && rule.minParagraphs != null && rule.minParagraphs > rule.maxParagraphs) {
 			return "redirect:/rules/" + id + "/edit?minPara=true";
 		}
-		if (rule.slides != null && !rule.slides.matches("[1234567890,-]+") && !rule.slides.isEmpty()) {
+		if (rule.slides != null && !rule.slides.matches("[\s1234567890,-]+") && !rule.slides.isEmpty()) {
 			return "redirect:/rules/" + id + "/edit?Slide=true";
 		}
 		if (rule.minQuantity != null && rule.maxQuantity != null && rule.minQuantity > rule.maxQuantity) {

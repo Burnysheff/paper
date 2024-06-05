@@ -81,14 +81,14 @@ public class PresentationCheck {
 					if (shape instanceof XSLFTable) {
 						tables++;
 					} else {
-						++charts;
+						charts++;
 					}
 				}
 			}
 
 			List<Rule> rulesSlide = ruleMap.get(i);
 			if (rulesSlide == null) {
-				break;
+				continue;
 			}
 			for (Rule rule : rulesSlide) {
 				if (!rule.allowText && textBoxes > 0) {
@@ -140,6 +140,8 @@ public class PresentationCheck {
 			}
 		}
 
+		System.out.println("AAAA  " + slide + "   " + shapes);
+
 		Collections.sort(heights);
 		Collections.sort(widths);
 
@@ -181,12 +183,12 @@ public class PresentationCheck {
 			String[] smallers;
 			if (part.contains("-")) {
 				smallers = part.split("-");
-				for (int i = Integer.parseInt(smallers[0]); i <= Integer.parseInt(smallers[1]); ++i) {
+				for (int i = Integer.parseInt(smallers[0].trim()); i <= Integer.parseInt(smallers[1].trim()); ++i) {
 					numberEntities.add(i);
 				}
 			} else {
 				try {
-					numberEntities.add(Integer.parseInt(part));
+					numberEntities.add(Integer.parseInt(part.trim()));
 				} catch (NumberFormatException ignored) {
 				}
 			}

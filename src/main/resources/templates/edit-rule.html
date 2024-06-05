@@ -114,7 +114,7 @@
             <label>Разрешен текст в презентации: <input type="checkbox" th:field="*{allowText}" th:value="${rule.allowText}"/></label>
             <label>Разрешены изображения в презентации: <input type="checkbox" th:field="*{allowImages}" th:value="${rule.allowImages}"/></label>
             <label>Разрешено видео в презентации: <input type="checkbox" th:field="*{allowVideo}" th:value="${rule.allowVideo}"/></label>
-            <label>Разрешены диаграммы в презентации: <input type="checkbox" th:field="*{allowCharts}" th:value="${rule.allowCharts}"/></label>
+            <label>Разрешены диаграммы и прочие графические файлы в презентации: <input type="checkbox" th:field="*{allowCharts}" th:value="${rule.allowCharts}"/></label>
             <label>Разрешены таблицы в презентации: <input type="checkbox" th:field="*{allowTables}" th:value="${rule.allowTables}"/></label>
             <label>Максимальное количество элементов на слайде: <input type="number" th:field="*{maxSlideElements}" th:value="${rule.maxSlideElements}" min="0" max="100" oninput="validity.valid||(value='');"/></label>
             <label>Минимальное количество элементов на слайде: <input type="number" th:field="*{minSlideElements}" th:value="${rule.minSlideElements}" min="0" max="100" oninput="validity.valid||(value='');"/></label>
@@ -163,6 +163,6 @@
         </form>
     </div>
 </div>
-<button onclick="history.back()">Назад</button>
+<button onclick="location.href='/home'">Назад</button>
 </body>
 </html>

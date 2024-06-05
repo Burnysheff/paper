@@ -174,11 +174,11 @@
       </label>
       <label>
         Имя:
-        <input type="text" id="nameP" name="name" th:field="*{name}" required>
+        <input type="text" id="nameP" name="name" th:field="*{name}"  maxlength="15" required>
       </label>
       <label>
         Описание:
-        <textarea name="description" id="descriptionP" th:field="*{description}" required></textarea>
+        <textarea name="description" id="descriptionP" th:field="*{description}" maxlength="100" required></textarea>
       </label>
       <label>
         Минимальное количество слайдов:
@@ -202,12 +202,12 @@
         <input type="checkbox" id="allowVideoP" name="allowVideo" th:field="*{allowVideo}">
       </label>
       <label>
-        Разрешить диаграммы в презентации:
-        <input type="checkbox" id="allowChartsP" name="allowCharts" th:field="*{allowCharts}">
-      </label>
-      <label>
         Разрешить таблицы в презентации:
         <input type="checkbox" id="allowTablesP" name="allowTables" th:field="*{allowTables}">
+      </label>
+      <label>
+        Разрешить диаграммы и прочие графические компоненты в презентации:
+        <input type="checkbox" id="allowChartsP" name="allowCharts" th:field="*{allowCharts}">
       </label>
       <label>
         Максимальное количество элементов на слайде:
@@ -237,11 +237,11 @@
           </div>
           <div class="form-group">
             <label for="name">Имя правила</label>
-            <input type="text" id="name" name="name" th:field="*{name}" required>
+            <input type="text" id="name" name="name" th:field="*{name}" maxlength="15" required>
           </div>
           <div class="form-group">
             <label for="description">Описание правила</label>
-            <input type="text" id="description" name="description" th:field="*{description}" placeholder="Правило для описания наличия заголовков...." required>
+            <input type="text" id="description" name="description" th:field="*{description}" maxlength="100" placeholder="Правило для описания наличия заголовков...." required>
           </div>
           <hr>
           <div class="form-group">
@@ -265,20 +265,20 @@
           <!-- Префикс строки -->
           <div class="form-group">
             <label for="prefix">Префикс строки</label>
-            <input type="text" id="prefix" th:field="*{prefix}" placeholder="Абзац должен начинаться с...">
+            <input type="text" id="prefix" th:field="*{prefix}" placeholder="Абзац должен начинаться с..." maxlength="25">
             <label class="checkbox-item"><input type="checkbox" id="prefixReverse" name="prefixReverse" th:field="*{prefixReverse}">Запретить обозначенный префикс</label>
           </div>
 
           <!-- Постфикс строки -->
           <div class="form-group">
             <label for="postfix">Постфикс строки</label>
-            <input type="text" id="postfix" th:field="*{postfix}" placeholder="Абзац должен заканчиваться на...">
+            <input type="text" id="postfix" th:field="*{postfix}" placeholder="Абзац должен заканчиваться на..." maxlength="25">
             <label class="checkbox-item"><input type="checkbox" id="postfixReverse" name="postfixReverse" th:field="*{postfixReverse}">Запретить обозначенный постфикс</label>
           </div>
 
           <div class="form-group">
             <label for="fonts">Разрешенные шрифты:</label>
-            <input type="text" id="fonts" th:field="*{fonts}" placeholder="Times new Roman, HSE Sans">
+            <input type="text" id="fonts" th:field="*{fonts}" placeholder="Times new Roman, HSE Sans" maxlength="500">
             <p>Введите имена шрифтов через запятую в любом регистре. Пример:Times new Roman,HSE Sans</p>
             <p>Если оставить поле пустым, будут рассматриваться все шрифты</p>
             <label class="checkbox-item"><input type="checkbox" id="fontReverse" name="fontReverse" th:field="*{fontReverse}">Запретить обозначенные шрифты</label>
@@ -286,7 +286,7 @@
 
           <div class="form-group">
             <label for="fontSizes">Размеры шрифта:</label>
-            <input type="text" id="fontSizes" name="fontSizes" th:field="*{fontSizes}" placeholder="1,3,6-10,12">
+            <input type="text" id="fontSizes" name="fontSizes" th:field="*{fontSizes}" placeholder="1,3,6-10,12" maxlength="100">
             <p>Если оставить поле пустым, будут рассматриваться все размеры шрифтов</p>
             <p>Введите номера слайдов через запятую. Интервалы можно записать через дефис. Пример: 1,3,13,20-25</p>
             <span th:if="${param.errorFonts}" style="color: red;">Может содержать только цифры и символы "," и "-"</span>
@@ -343,18 +343,18 @@
       <label><input type="checkbox" id="activeI" name="activeI" th:field="*{active}">Правило активно (должно использоваться в проверке):</label>
       <label>
         Имя:
-        <input type="text" id="nameI" name="nameI" th:field="*{name}" required>
+        <input type="text" id="nameI" name="nameI" th:field="*{name}" maxlength="15" required>
       </label>
       <label>
         Описание:
-        <textarea name="description" id="descriptionI" th:field="*{description}" required></textarea>
+        <textarea name="description" id="descriptionI" th:field="*{description}" maxlength="100" required></textarea>
       </label>
 
       <label for="slidesI">Номера слайдов, рассматриваемых в правиле:</label>
-      <input type="text" id="slidesI" name="slidesI" th:field="*{slides}" placeholder="1,3,5-10,16,18">
+      <input type="text" id="slidesI" name="slidesI" th:field="*{slides}" placeholder="1,3,5-10,16,18" maxlength="100">
       <p>Введите номера слайдов через запятую. Интервалы можно записать через дефис. Пример: 1,3,5-10,16,18</p>
       <p>Если оставить поле пустым, будут рассматриваться все слайды</p>
-      <span th:if="${param.errorSlides}" style="color: red;">Может содержать только цифры и символы "." и "-"</span>
+      <span th:if="${param.errorSlides}" style="color: red;">Может содержать только цифры и символы "," и "-"</span>
       <label><input type="checkbox" id="invertSlidesI" name="invertSlidesI" th:field="*{invertSlides}">Рассматривать все слайды, кроме обозначенных</label>
 
       <label for="minQuantityI">Минимальное число картинок / видео элементов на слайде</label>
@@ -389,7 +389,7 @@
     </form>
   </div>
   <div class="button-container">
-    <button class="back-button" onclick="history.back()">Назад</button>
+    <button class="back-button" onclick="location.href='/home'">Назад</button>
   </div>
 </div>
 <script>
